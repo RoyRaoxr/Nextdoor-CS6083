@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Nextdoor</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous">
+  <link rel="stylesheet" media="all" th:href="@{/css/form-validation.css}">
+  <script th:src="@{/js/form-validation.js}"></script>
+</head>
+<body>
+<div class="container">
+  <div class="py-5 text-center">
+    <h2>Sign up page</h2>
+    <p class="lead">Please fill out the form to finish sign up process.</p>
+  </div>
+
+  <div>
+    <div class="col-md-16 order-md-1">
+      <h4 class="mb-3">User profile</h4>
+      <form class="needs-validation" novalidate th:action="@{/signup}" th:object="${user}"
+            method="POST">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="firstName">First name</label>
+            <input type="text" th:field="*{firstname}" class="form-control" id="firstName"
+                   placeholder="" value="" required>
+            <div class="invalid-feedback">
+              Valid first name is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="lastName">Last name</label>
+            <input type="text" th:field="*{lastname}" class="form-control" id="lastName"
+                   placeholder="" value="" required>
+            <div class="invalid-feedback">
+              Valid last name is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="username">Username
+            <span class="text-muted" th:if="${userExists}" style="background-color: palevioletred">[Username already exists]</span></label>
+          <div class="input-group">
+            <input type="text" th:field="*{username}" class="form-control" id="username"
+                   placeholder="Only letters and numbers" required>
+            <div class="invalid-feedback" style="width: 100%;">
+              Your username is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email">Password</label>
+          <input type="password" th:field="*{password}" class="form-control" id="password"
+                 placeholder="Password" required>
+          <div class="invalid-feedback">
+            Please enter a valid passwrod.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="address">The street you live</label>
+          <input type="text" th:field="*{ustreet}" class="form-control" id="ustreet"
+                 placeholder="1234 Main St" required>
+          <div class="invalid-feedback">
+            Please enter your shipping street.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="address2">A brief self introduction<span class="text-muted">(Optional)</span></label>
+          <input type="text" th:field="*{profile}" class="form-control" id="profile" placeholder="">
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="country">City</label>
+            <input type="text" th:field="*{ucity}" class="form-control" id="city"
+                   placeholder="New york" required>
+            <div class="invalid-feedback">
+              Please select a valid city.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="state">State</label>
+            <input type="text" th:field="*{ustate}" class="form-control" id="state" placeholder="NY"
+                   required>
+            <div class="invalid-feedback">
+              Please provide a valid state.
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label for="zip">How you want to be notified</label>
+            <input type="text" th:field="*{notify}" class="form-control" id="zip" placeholder="">
+            <div class="invalid-feedback">
+              notification code required.
+            </div>
+          </div>
+        </div>
+
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Done!</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">Nextdoor - CS6083</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
+</div>
+</body>
+</html>

@@ -72,4 +72,20 @@ public class User {
     @Column(name = "notify")
     private String notify;
 
+    @Override
+    public String toString() {
+        return "User{" +
+            "uid=" + uid +
+            ", username='" + username + '\'' +
+            ", password='" + password + '\'' +
+            ", firstname='" + firstname + '\'' +
+            ", lastname='" + lastname + '\'' +
+            ", ustreet='" + ustreet + '\'' +
+            ", ucity='" + ucity + '\'' +
+            ", ustate='" + ustate + '\'' +
+            ", profile='" + profile + '\'' +
+            ", photo='" + photo + '\'' +
+            ", notify='" + notify + '\'' +
+            '}';
+    }
 }

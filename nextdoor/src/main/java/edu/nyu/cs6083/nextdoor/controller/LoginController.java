@@ -38,7 +38,7 @@ public class LoginController {
             m.addAttribute("err", true);
             return "index";
         }
-        request.getSession(true).setAttribute("useradmin", currUser);
+        request.getSession().setAttribute("useradmin", currUser);
         return "redirect:/main";
     }
 

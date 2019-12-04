@@ -11,9 +11,12 @@
 </head>
 <body>
 <form class="form-signin" th:action="@{/login}" th:object="${user}" method="post">
-  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-  <label for="inputEmail" class="sr-only">Username</label><span th:if="${err}"
-                                                                style="background-color: palevioletred">Wrong</span>
+
+  <img th:src="@{/icons/people.svg}" width="32" height="32" title="Bootstrap">
+  <span >Login to your account</span>
+  <label for="inputEmail" class="sr-only">Username</label>
+  <br>
+  <span th:if="${err}" style="color: palevioletred">login wrong</span>
   <input type="text" id="inputEmail" th:field="*{username}" class="form-control"
          placeholder="Username" required
          autofocus>
@@ -21,16 +24,13 @@
   <label for="inputPassword" class="sr-only">Password</label>
   <input type="password" id="inputPassword" th:field="*{password}" class="form-control"
          placeholder="Password" required>
-  <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
-  </div>
   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
   <a th:href="@{/signup}">
     Sign up
   </a>
-  <p class="mt-5 mb-3 text-muted">&copy; CS6083 - Final project</p>
+  <p class="mt-5 mb-3 text-muted">&copy; CS6083 - Final project
+    <img th:src="@{/icons/code-slash.svg}" width="32" height="32" title="Bootstrap">
+  </p>
 </form>
 
 </body>

@@ -20,6 +20,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "uid")
+    @Getter
+    @Setter
     private Integer uid;
 
     @Getter

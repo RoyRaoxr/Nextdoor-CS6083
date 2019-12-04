@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-public class LoginController {
+public class UserAuthController {
 
-    private final Logger logger = LoggerFactory.getLogger(LoginController.class.getSimpleName());
+    private final Logger logger = LoggerFactory.getLogger(UserAuthController.class.getSimpleName());
 
     @Autowired
     UserDao userDao;
@@ -38,6 +37,7 @@ public class LoginController {
             m.addAttribute("err", true);
             return "index";
         }
+        request.getSession().setMaxInactiveInterval(0);
         request.getSession().setAttribute("useradmin", currUser);
         return "redirect:/main";
     }

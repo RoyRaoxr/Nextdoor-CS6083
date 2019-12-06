@@ -70,7 +70,7 @@ body {
 .text-white-50 { color: rgba(255, 255, 255, .5); }
 
 .bg-purple { background-color: #6f42c1; }
-
+.bg-blue {background-color: dodgerblue}
 .lh-100 { line-height: 1; }
 .lh-125 { line-height: 1.25; }
 .lh-150 { line-height: 1.5; }

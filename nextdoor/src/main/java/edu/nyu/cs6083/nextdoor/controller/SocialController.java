@@ -7,12 +7,12 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SocialController {
@@ -69,5 +69,19 @@ public class SocialController {
         List<User> allNeighbors = userDao.findAllById(neighborids);
         m.addAttribute("neighbors", allNeighbors);
         return "main/neighbors";
+    }
+
+    @GetMapping("/addfriend")
+    public String addFriend(HttpServletRequest request, @RequestParam("username") String username,
+        Model m) {
+        User user = (User) request.getSession().getAttribute("useradmin");
+        User friend = userDao.findByUsername(username);
+        if (friend == null) {
+            m.addAttribute("err", true);
+            return "main/friends";
+        }
+        userDao.createApplication(user.getUid(), friend.getUid());
+        return "redierct:/friends";
+
     }
 }

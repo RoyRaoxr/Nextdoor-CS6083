@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -74,6 +76,11 @@ public class User {
     @Column(name = "notify")
     private String notify;
 
+    @Getter
+    @Setter
+    @Column(name = "lastlogouttime")
+    private Timestamp lastlogouttime;
+
     @Override
     public String toString() {
         return "User{" +
@@ -88,6 +95,7 @@ public class User {
             ", profile='" + profile + '\'' +
             ", photo='" + photo + '\'' +
             ", notify='" + notify + '\'' +
+            ", lastlogouttime=" + lastlogouttime + '\'' +
             '}';
     }
 }

@@ -11,15 +11,15 @@
   <script th:src="@{/js/offcanvas.js}"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-  <a class="navbar-brand mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  <a class="navbar-brand ml-5 mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse">
     <form class="form-inline w-100 ml-3 my-2 my-lg-0">
       <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search" type="submit">Search</button>
     </form>
   </div>
 

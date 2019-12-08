@@ -130,6 +130,26 @@ public class SocialController {
 
         List<User> allNeighbors = userDao.findAllById(neighborids);
         m.addAttribute("neighbors", allNeighbors);
+
+        String listSameHood = "Select uid \n"
+            + "From joinblock natural join block \n"
+            + "Where \n"
+            + "nid = (Select nid From joinblock natural join block where uid = ?) and \n"
+            + "uid != ? and (uid not in (Select neighborid From neighbors Where userid = ? Union Select userid as neighborid From neighbors Where neighborid = ?))";
+
+        List<Integer> sameHood = new ArrayList<>();
+        jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(listSameHood);
+            ps.setInt(1, user.getUid());
+            ps.setInt(2, user.getUid());
+            ps.setInt(3, user.getUid());
+            ps.setInt(4, user.getUid());
+            return ps;
+        }, rs -> {
+            sameHood.add(rs.getInt("uid"));
+        });
+        List<User> inHood = userDao.findAllById(sameHood);
+        m.addAttribute("samehood", inHood);
         return "main/neighbors";
     }
 
@@ -144,14 +164,29 @@ public class SocialController {
 
     }
 
-    @GetMapping("/addneighbor")
-    public String addNeighbor(HttpServletRequest request, @RequestParam("id") Integer uid, Model m) {
+    @GetMapping("/addneighbors")
+    public String addNeighbor(HttpServletRequest request, @RequestParam("id") Integer uid,
+        Model m) {
         User user = (User) request.getSession().getAttribute("useradmin");
 
         String sql = "Insert into neighbors values (?, ?)";
         //userDao.createFriendsApplication(user.getUid(), uid);
         jdbcTemplate.update(sql, user.getUid(), uid);
-        return "redirect:/friends";
+        return "redirect:/neighbors";
 
+    }
+
+    @GetMapping("/acceptfriend")
+    public String acceptFriend(HttpServletRequest request, @RequestParam("id") Integer uid,
+        @RequestParam("s") Integer s, Model m) {
+        User user = (User) request.getSession().getAttribute("useradmin");
+        if (s == 1) {
+            String sql = "Update friends set status = 1 where userid = ? and friendid = ?";
+            jdbcTemplate.update(sql, uid, user.getUid());
+        } else {
+            String sql = "Delete from friends where userid = ? and friendid = ?";
+            jdbcTemplate.update(sql, uid, user.getUid());
+        }
+        return "redirect:/friends";
     }
 }

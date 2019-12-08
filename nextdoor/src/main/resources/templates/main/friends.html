@@ -18,8 +18,11 @@
   </button>
   <div class="collapse navbar-collapse">
     <form class="form-inline w-100 ml-3 my-2 my-lg-0">
-      <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread" aria-label="Search">
-      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search" type="submit">Search</button>
+      <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread"
+             aria-label="Search">
+      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search"
+              type="submit">Search
+      </button>
 
     </form>
   </div>
@@ -77,7 +80,8 @@
           <div class="d-flex justify-content-between align-items-center w-100">
             <strong class="text-gray-dark"
                     th:text="${toApp.getFirstname()} +' '+${toApp.getLastname()}"></strong>
-            <a href="#">Accept</a> <a href="#">Deny</a>
+            <a th:href="@{/acceptfriend(id=${toApp.getUid()}, s=1)}">Accept</a>
+            <a th:href="@{/acceptfriend(id=${toApp.getUid()}, s=0)}">Deny</a>
           </div>
 
           <span class="d-block"></span>

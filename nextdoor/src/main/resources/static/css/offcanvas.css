@@ -5,6 +5,7 @@ body {
 
 body {
   padding-top: 56px;
+  background: ghostwhite!important;
 }
 
 @media (max-width: 991.98px) {

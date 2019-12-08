@@ -2,6 +2,7 @@ package edu.nyu.cs6083.nextdoor.controller;
 
 
 import edu.nyu.cs6083.nextdoor.bean.User;
+import edu.nyu.cs6083.nextdoor.dao.FriendDao;
 import edu.nyu.cs6083.nextdoor.dao.UserDao;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ public class SocialController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    FriendDao friendDao;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -46,9 +50,67 @@ public class SocialController {
         });
 
         List<User> allFriends = userDao.findAllById(friendids);
-
         m.addAttribute("friends", allFriends);
+
+        List<Integer> sameHoodids = new ArrayList<>();
+        String listSameHood = "Select uid \n"
+            + "From joinblock natural join block \n"
+            + "Where \n"
+            + "nid = (Select nid From joinblock natural join block where uid = ?) and \n"
+            + "uid != ? and (uid not in (Select friendid From friends Where userid = ? Union Select userid as friendid From friends Where friendid = ?))";
+
+        jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(listSameHood);
+            ps.setInt(1, user.getUid());
+            ps.setInt(2, user.getUid());
+            ps.setInt(3, user.getUid());
+            ps.setInt(4, user.getUid());
+            return ps;
+        }, rs -> {
+            sameHoodids.add(rs.getInt("uid"));
+        });
+
+        List<User> sameHoodToAdd = userDao.findAllById(sameHoodids);
+        m.addAttribute("hoods", sameHoodToAdd);
+
+        String firendReq = "Select friendid From friends Where userid = ? \n"
+            + "and status = 0 Union Select userid as friendid From friends Where friendid = ? and status = 0";
+
+        List<User> toApprove = findPending(user);
+        List<User> friendReq = friendReqFrom(user);
+        m.addAttribute("toApprove", toApprove);
+        m.addAttribute("pendings", friendReq);
         return "main/friends";
+    }
+
+    private List<User> findPending(User user) {
+        String firendReq = "Select userid From friends Where friendid = ? and status = 0";
+        List<Integer> fromIds = new ArrayList<>();
+        jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(firendReq);
+            ps.setInt(1, user.getUid());
+            return ps;
+        }, rs -> {
+            fromIds.add(rs.getInt("userid"));
+        });
+
+        List<User> ret = userDao.findAllById(fromIds);
+        return ret;
+    }
+
+    private List<User> friendReqFrom(User user) {
+        String firendReq = "Select friendid From friends Where userid = ? and status = 0";
+        List<Integer> toIds = new ArrayList<>();
+        jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(firendReq);
+            ps.setInt(1, user.getUid());
+            return ps;
+        }, rs -> {
+            toIds.add(rs.getInt("friendid"));
+        });
+
+        List<User> ret = userDao.findAllById(toIds);
+        return ret;
     }
 
     @GetMapping("/neighbors")
@@ -72,16 +134,24 @@ public class SocialController {
     }
 
     @GetMapping("/addfriend")
-    public String addFriend(HttpServletRequest request, @RequestParam("username") String username,
-        Model m) {
+    public String addFriend(HttpServletRequest request, @RequestParam("id") Integer uid, Model m) {
         User user = (User) request.getSession().getAttribute("useradmin");
-        User friend = userDao.findByUsername(username);
-        if (friend == null) {
-            m.addAttribute("err", true);
-            return "main/friends";
-        }
-        userDao.createApplication(user.getUid(), friend.getUid());
-        return "redierct:/friends";
+
+        String sql = "Insert into friends Values (?, ?, 0, (Select nid from joinblock natural join block where uid = ?))";
+        //userDao.createFriendsApplication(user.getUid(), uid);
+        jdbcTemplate.update(sql, user.getUid(), uid, user.getUid());
+        return "redirect:/friends";
+
+    }
+
+    @GetMapping("/addneighbor")
+    public String addNeighbor(HttpServletRequest request, @RequestParam("id") Integer uid, Model m) {
+        User user = (User) request.getSession().getAttribute("useradmin");
+
+        String sql = "Insert into neighbors values (?, ?)";
+        //userDao.createFriendsApplication(user.getUid(), uid);
+        jdbcTemplate.update(sql, user.getUid(), uid);
+        return "redirect:/friends";
 
     }
 }

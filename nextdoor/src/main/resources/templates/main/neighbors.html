@@ -11,15 +11,15 @@
   <script th:src="@{/js/offcanvas.js}"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-  <a class="navbar-brand mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  <a class="navbar-brand ml-5 mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse">
     <form class="form-inline w-100 ml-3 my-2 my-lg-0">
       <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search" type="submit">Search</button>
     </form>
   </div>
 
@@ -49,28 +49,84 @@
 </nav>
 
 <main role="main" class="container">
-  <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded shadow-sm">
-
-    <div class="lh-100">
-      <h6 class="mb-0 text-white lh-100" th:text="'Hi ' + ${session.useradmin.getFirstname()}"></h6>
-      <small
-          th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></small>
+  <div class="row">
+    <div
+        class="d-flex align-items-center col-md-7 p-3 my-3 text-white-50 bg-purple rounded shadow-sm">
+      <div class="lh-100">
+        <h6 class="mb-0 text-white lh-100"
+            th:text="'Hi ' + ${session.useradmin.getFirstname()}"></h6>
+        <small
+            th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></small>
+      </div>
     </div>
-  </div>
+    <div
+        class="d-flex align-items-center col-md-5 p-3 my-3 text-white-50 bg-blue rounded shadow-sm">
+      <div class="lh-100">
+        <h6 class="mb-0 text-white lh-100">Add a friend</h6>
+      </div>
 
-  <div class="my-3 p-3 bg-white rounded shadow-sm">
-    <h6 class="border-bottom border-gray pb-2 mb-0">Your neighbors</h6>
+    </div>
 
-    <div class="media text-muted pt-3" th:each="neighbor: ${neighbors}">
-      <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-        <div class="d-flex justify-content-between align-items-center w-100">
-          <strong class="text-gray-dark" th:text="${neighbor.getFirstname()}+' ' + ${neighbor.getLastname()}">Full Name</strong>
-          <a href="#">Follow</a>
+
+    <div class="my-3 p-3 bg-white rounded shadow-sm col-md-7">
+      <h6 class="border-bottom border-gray pb-2 mb-0">Friends requests</h6>
+      <div class="media text-muted pt-3" th:each="toApp : ${toApprove}">
+        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <strong class="text-gray-dark"
+                    th:text="${toApp.getFirstname()} +' '+${toApp.getLastname()}"></strong>
+            <a href="#">Accept</a> <a href="#">Deny</a>
+          </div>
+
+          <span class="d-block"></span>
         </div>
-        <span class="d-block" th:text="${neighbor.getUstreet()} + ', '+${neighbor.getUcity()} + ', '+ ${neighbor.getUstate()}"></span>
+      </div>
+    </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm col-md-5">
+      <h6 class="border-bottom border-gray pb-2 mb-0">Choose your friends or neighbors</h6>
+      <div class="media text-muted pt-3" th:each="h: ${hoods}">
+        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <strong class="text-gray-dark"
+                      th:text="${h.getFirstname()} +' '+${h.getLastname()}"></strong>
+              <a th:href="@{/addfriend(id=${h.getUid()})}">Add as friend</a>
+            </div>
+          </div>
+          <span class="d-block"></span>
+        </div>
+      </div>
+
+    </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm col-md-7">
+      <h6 class="border-bottom border-gray pb-2 mb-0">Pending friends requests</h6>
+      <div class="media text-muted pt-3" th:each="pen : ${pendings}">
+        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <strong class="text-gray-dark"
+                    th:text="${pen.getFirstname()} +' '+${pen.getLastname()}"></strong>
+            <strong>Pending</strong>
+          </div>
+
+          <span class="d-block"></span>
+        </div>
       </div>
     </div>
 
+    <div class="my-3 p-3 bg-white rounded shadow-sm col-md-7">
+      <h6 class="border-bottom border-gray pb-2 mb-0">Your friends</h6>
+      <div class="media text-muted pt-3" th:each="friend: ${friends}">
+        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <strong class="text-gray-dark"
+                    th:text="${friend.getFirstname()}+' ' + ${friend.getLastname()}">Full
+              Name</strong>
+          </div>
+          <span class="d-block"
+                th:text="${friend.getUstreet()} + ', '+${friend.getUcity()} + ', '+ ${friend.getUstate()}"></span>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

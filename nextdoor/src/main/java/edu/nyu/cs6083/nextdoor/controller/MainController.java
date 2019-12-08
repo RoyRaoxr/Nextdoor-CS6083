@@ -1,12 +1,17 @@
 package edu.nyu.cs6083.nextdoor.controller;
 
 
+import edu.nyu.cs6083.nextdoor.bean.Block;
+import edu.nyu.cs6083.nextdoor.bean.Neighborhood;
 import edu.nyu.cs6083.nextdoor.bean.User;
+import edu.nyu.cs6083.nextdoor.dao.BlockDao;
+import edu.nyu.cs6083.nextdoor.dao.NeighborhoodDao;
 import edu.nyu.cs6083.nextdoor.dao.ThreadDao;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;

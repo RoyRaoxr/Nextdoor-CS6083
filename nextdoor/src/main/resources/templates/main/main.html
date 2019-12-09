@@ -94,6 +94,19 @@
       </p>
     </div>
   </div>
+
+  <div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Neighbors message</h6>
+    <div class="media text-muted pt-3" th:each="t : ${t0}">
+
+      <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+        <strong class="d-block text-gray-dark">
+          <a th:href="@{/main}" th:text="${t.getTitle()}"></a>
+        </strong>
+      </p>
+    </div>
+  </div>
+
 </main>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

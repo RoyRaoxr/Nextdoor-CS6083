@@ -62,6 +62,58 @@
   </div>
 
   <div class="my-3 p-3 bg-white rounded shadow-sm">
+    <form>
+      <h6 class="border-bottom border-gray pb-2 mb-0">Compose message</h6>
+      <div class="form-group">
+        <div class="form-group col-md">
+          <label for="inputTitle">Title:</label>
+          <input type="email" class="form-control" id="inputTitle">
+        </div>
+        <div class="form-row col-md">
+          <label for="inputText">Content:</label>
+          <textarea class="form-control" rows="5" id="inputText"></textarea>
+        </div>
+        <div class="form-check ">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+          <label class="form-check-label" for="exampleRadios1">
+            To a Neighbor
+          </label>
+          <select class="w-75 browser-default custom-select-sm">
+            <option selected>Select a Neighbor</option>
+            <option value="xx1">xx1</option>
+            <option value="xx2">xx2</option>
+            <option value="All Friends">All Neighbors</option>
+          </select>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+          <label class="form-check-label" for="exampleRadios2">
+            To a Friend
+          </label>
+          <select class="w-75 browser-default custom-select-sm" id = "select">
+            <option selected>Select a Friend</option>
+            <option value="xx1">xx1</option>
+            <option value="xx2">xx2</option>
+            <option value="All Friends">All Frinds</option>
+          </select>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+          <label class="form-check-label" for="exampleRadios3">
+            Your Neighborhood
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4">
+          <label class="form-check-label" for="exampleRadios4">
+            Your Block
+          </label>
+        </div>
+      </div>
+      <button type="submit" class="mr-5 btn btn-primary">Post</button>
+    </form>
+  </div>
+  <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Friends message</h6>
     <div class="media text-muted pt-3" th:each="t : ${t1}">
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">

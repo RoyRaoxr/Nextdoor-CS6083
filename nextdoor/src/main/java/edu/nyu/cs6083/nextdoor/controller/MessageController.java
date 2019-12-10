@@ -85,7 +85,7 @@ public class MessageController {
             case "toneighbor":
                 break;
             case "tofriend":
-                String type = "1";
+                insertMessage(1, data, user);
                 break;
             case "allblock":
                 break;
@@ -96,19 +96,32 @@ public class MessageController {
         return "login200";
     }
 
-    private void insertMessage(String type, Map<String, String> data) {
+    private void insertMessage(int type, Map<String, String> data, User user) {
         String s1 = "INSERT INTO `nextdoor`.`thread`(`subject`, `type`) VALUES (?, ?);";
-        String s2 = "Insert into message (`tid`, `author`, `title`, `timestamp`, `text`, `information`) Values (last_insert_id(), ?, ?, ?, ?, ?)";
-        String s3 = "Insert into threadparticipant values(last_insert_id(), ?)";
+        String s2 =
+            "Insert into message (`tid`, `author`, `title`, `timestamp`, `text`, `lat`,`lng`) "
+                + "Values (?, ?, ?, now(), ?, ?, ?)";
+        String s3 = "Insert into threadparticipant values(?, ?)";
+        int recvid = Integer.MIN_VALUE;
 
-        jdbcTemplate.query(con -> {
-            PreparedStatement ps = con.prepareStatement(s1);
-            ps.setInt(1, user.getUid());
-            ps.setInt(2, user.getUid());
-            ps.setInt(3, 1);
-            return ps;
-        }, rs -> {
-            type3.add(rs.getInt("tid"));
-        });
+        jdbcTemplate.update(s1, data.get("title"), type);
+
+        int tid = jdbcTemplate
+            .queryForObject("select tid from thread where tid = (select max(tid) from thread)",
+                Integer.class);
+
+        jdbcTemplate.update(s2, tid, user.getUid(), data.get("title"), data.get("content"), 0, 0);
+        if (type == 1) {
+            recvid = Integer.valueOf(data.get("tofriend"));
+            jdbcTemplate.update(s3, tid, recvid);
+        } else if (type == 0) {
+
+        } else if (type == 2) {
+
+        } else if (type == 3) {
+
+        }
+
+
     }
 }

@@ -83,13 +83,16 @@ public class MessageController {
 
         switch (state) {
             case "toneighbor":
+                insertMessage(0, data, user);
                 break;
             case "tofriend":
                 insertMessage(1, data, user);
                 break;
             case "allblock":
+                insertMessage(3, data, user);
                 break;
             case "allhood":
+                insertMessage(2, data, user);
                 break;
         }
 
@@ -102,6 +105,7 @@ public class MessageController {
             "Insert into message (`tid`, `author`, `title`, `timestamp`, `text`, `lat`,`lng`) "
                 + "Values (?, ?, ?, now(), ?, ?, ?)";
         String s3 = "Insert into threadparticipant values(?, ?)";
+
         int recvid = Integer.MIN_VALUE;
 
         jdbcTemplate.update(s1, data.get("title"), type);
@@ -111,15 +115,44 @@ public class MessageController {
                 Integer.class);
 
         jdbcTemplate.update(s2, tid, user.getUid(), data.get("title"), data.get("content"), 0, 0);
+
         if (type == 1) {
             recvid = Integer.valueOf(data.get("tofriend"));
             jdbcTemplate.update(s3, tid, recvid);
         } else if (type == 0) {
-
+            recvid = Integer.valueOf(data.get("toneighbor"));
+            jdbcTemplate.update(s3, tid, recvid);
         } else if (type == 2) {
+            String s5 = "select uid from joinblock natural join block "
+                + "where nid = (select nid from joinblock natural join block where uid = ?)";
+            List<Integer> ids = new ArrayList<>();
+            jdbcTemplate.query(con -> {
+                PreparedStatement ps = con.prepareStatement(s5);
+                ps.setInt(1, user.getUid());
+                return ps;
+            }, rs -> {
+                ids.add(rs.getInt("uid"));
+            });
+
+            for (int id : ids) {
+                jdbcTemplate.update(s3, tid, id);
+            }
 
         } else if (type == 3) {
+            String s4 = "select uid from joinblock where bid = (select bid from joinblock where uid = ?)";
+            List<Integer> ids = new ArrayList<>();
 
+            jdbcTemplate.query(con -> {
+                PreparedStatement ps = con.prepareStatement(s4);
+                ps.setInt(1, user.getUid());
+                return ps;
+            }, rs -> {
+                ids.add(rs.getInt("uid"));
+            });
+
+            for (int id : ids) {
+                jdbcTemplate.update(s3, tid, id);
+            }
         }
 
 

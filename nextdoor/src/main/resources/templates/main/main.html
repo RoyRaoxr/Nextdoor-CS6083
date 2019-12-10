@@ -62,49 +62,54 @@
   </div>
 
   <div class="my-3 p-3 bg-white rounded shadow-sm">
-    <form>
+    <form th:action="@{/sendmessage}" method="post">
       <h6 class="border-bottom border-gray pb-2 mb-0">Compose message</h6>
       <div class="form-group">
         <div class="form-group col-md">
           <label for="inputTitle">Title:</label>
-          <input type="email" class="form-control" id="inputTitle">
+          <input type="text" class="form-control" id="inputTitle" name="title">
         </div>
         <div class="form-row col-md">
           <label for="inputText">Content:</label>
-          <textarea class="form-control" rows="5" id="inputText"></textarea>
+          <textarea class="form-control" rows="5" id="inputText" name="content"></textarea>
         </div>
         <div class="form-check ">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+          <input class="form-check-input" type="radio" th:name="select" id="exampleRadios1"
+                 th:value="toneighbor" checked>
           <label class="form-check-label" for="exampleRadios1">
             To a Neighbor
           </label>
-          <select class="w-75 browser-default custom-select-sm">
-            <option selected>Select a Neighbor</option>
-            <option value="xx1">xx1</option>
-            <option value="xx2">xx2</option>
-            <option value="All Friends">All Neighbors</option>
+          <select class="w-75 browser-default custom-select-sm" name="toneighbor">
+            <option th:each="n:${neighbors}"
+                    th:text="${n.getFirstname()} +' '+${n.getLastname()}"
+                    th:value="${n.getUid()}"
+                    ></option>
+            <option th:value="all">All Neighbors</option>
           </select>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+          <input class="form-check-input" type="radio" name="select" id="exampleRadios2"
+                 th:value="tofriend">
           <label class="form-check-label" for="exampleRadios2">
             To a Friend
           </label>
-          <select class="w-75 browser-default custom-select-sm" id = "select">
-            <option selected>Select a Friend</option>
-            <option value="xx1">xx1</option>
-            <option value="xx2">xx2</option>
-            <option value="All Friends">All Frinds</option>
+          <select class="w-75 browser-default custom-select-sm" id="select" th:name="tofriend">
+            <option th:each="n:${friends}"
+                    th:text="${n.getFirstname()} +' '+${n.getLastname()}"
+                    th:value="${n.getUid()}"></option>
+            <option th:value="all">All Frinds</option>
           </select>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+          <input class="form-check-input" type="radio" th:name="select" id="exampleRadios3"
+                 th:value="allhood">
           <label class="form-check-label" for="exampleRadios3">
             Your Neighborhood
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4">
+          <input class="form-check-input" type="radio" th:name="select" id="exampleRadios4"
+                 th:value="allblock">
           <label class="form-check-label" for="exampleRadios4">
             Your Block
           </label>

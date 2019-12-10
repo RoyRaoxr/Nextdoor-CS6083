@@ -5,11 +5,11 @@ import edu.nyu.cs6083.nextdoor.bean.Message;
 import edu.nyu.cs6083.nextdoor.bean.User;
 import edu.nyu.cs6083.nextdoor.dao.MessageDao;
 import edu.nyu.cs6083.nextdoor.dao.ThreadDao;
+import edu.nyu.cs6083.nextdoor.dao.UserDao;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,9 @@ public class MainController {
 
     @Autowired
     ThreadDao threadDao;
+
+    @Autowired
+    UserDao userDao;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -101,11 +104,52 @@ public class MainController {
         });
         List<Message> type0s = messageDao.findAllById(type0);
 
-        m.addAttribute("t3",type3s);
-        m.addAttribute("t2",type2s);
-        m.addAttribute("t1",type1s);
-        m.addAttribute("t0",type0s);
+        m.addAttribute("t3", type3s);
+        m.addAttribute("t2", type2s);
+        m.addAttribute("t1", type1s);
+        m.addAttribute("t0", type0s);
+
+        List<Integer> friendids = new ArrayList<>();
+
+        String allfri = "Select friendid\n"
+            + "        From friends\n"
+            + "        Where userid = ? and status = 1\n"
+            + "        Union\n"
+            + "        select userid as friendid\n"
+            + "        From friends\n"
+            + "        Where friendid = ? and status = 1";
+
+        jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(allfri);
+            ps.setInt(1, user.getUid());
+            ps.setInt(2, user.getUid());
+            return ps;
+        }, rs -> {
+            friendids.add(rs.getInt("friendid"));
+        });
+
+        List<User> allFriends = userDao.findAllById(friendids);
+        m.addAttribute("friends", allFriends);
+        List<User> allNei = allNei(user);
+        m.addAttribute("neighbors", allNei);
         return "main/main";
+    }
+
+
+    private List<User> allNei(User user) {
+        String sql = "Select neighborid From neighbors Where userid = ?";
+        List<Integer> neighborids = new ArrayList<>();
+
+        jdbcTemplate.query(con -> {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, user.getUid());
+            return ps;
+        }, rs -> {
+            neighborids.add(rs.getInt("neighborid"));
+        });
+
+        return userDao.findAllById(neighborids);
+
     }
 
 //    @Autowired

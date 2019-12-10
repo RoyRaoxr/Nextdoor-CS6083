@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nextdoor - CS6083</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" media="all" th:href="@{/css/offcanvas.css}">
+    <script th:src="@{/js/offcanvas.js}"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+    <a class="navbar-brand ml-5 mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
+    <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+        <form class="form-inline w-100 ml-3 my-2 my-lg-0">
+            <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread"
+                   aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search"
+                    type="submit">Search
+            </button>
+        </form>
+    </div>
+
+    <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav ml-auto mr-5">
+            <li class="nav-item active">
+                <a class="nav-link" href="">Dashboard <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/friends}">Friends</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/neighbors}">Neighbors</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Profile & Settings
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" th:href="@{/profile}">Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" th:href="@{/logout}">Sign Out</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main role="main" class="container">
+    <div class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm">
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100" th:text="'Hi，' + ${session.useradmin.getFirstname()}"></h6>
+            <small
+                    th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></small>
+        </div>
+    </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <form th:action="@{/replymessage}" method="post">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Reply message</h6>
+            <div class="form-group">
+                <div class="form-group col-md">
+                    <label for="inputTitle">Title:</label>
+                    <input type="text" class="form-control" id="inputTitle" name="title">
+                </div>
+                <div class="form-row col-md">
+                    <label for="inputText">Content:</label>
+                    <textarea class="form-control" rows="5" id="inputText" name="content"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -216,6 +216,28 @@
       });
     })
 
+    var marker = null;
+    google.maps.event.addListener(map, 'click', function (event) {
+      var lat = event.latLng.lat();
+      var lng = event.latLng.lng();
+
+      // remove previous Marker
+      if (marker != null) {
+        marker.setMap(null);
+      }
+      // init Marker instance
+      marker = new google.maps.Marker({
+        position: {lat: lat, lng: lng},
+        title: "Hello World!"
+      });
+      // attach Marker instance to Map instance
+      marker.setMap(map);
+
+      // if you also want to change the value of FORM, you can add a hidden input in form, and change value using javascript doom:
+      console.log(lat);
+      console.log(lng);
+    });
+
   }
 
 

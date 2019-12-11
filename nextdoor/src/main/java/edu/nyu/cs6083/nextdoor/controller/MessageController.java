@@ -96,7 +96,7 @@ public class MessageController {
                 break;
         }
 
-        return "login200";
+        return "redirect:main";
     }
 
     private void insertMessage(int type, Map<String, String> data, User user) {
@@ -156,5 +156,10 @@ public class MessageController {
         }
 
 
+    }
+
+    @GetMapping("/reply")
+    public String reply() {
+        return "login200";
     }
 }

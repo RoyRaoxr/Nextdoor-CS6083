@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -49,7 +50,10 @@ public class MainController {
         User user = (User) request.getSession().getAttribute("useradmin");
 
         // initial message mid
-        String sql = "Select min(mid) as mid from message Where tid in (Select tid From message Where message.timestamp > (Select lastlogouttime From user Where uid = ?1) and tid in (Select tid From threadparticipant natural join thread Where recid = ?2 and type = ?3))\n";
+        String sql = "Select min(mid) as mid from message Where tid in \n"
+            + "(Select tid From message Where message.timestamp > \n"
+            + "(Select lastlogouttime From user Where uid = ?) \n"
+            + "and tid in (Select tid From threadparticipant natural join thread Where recid = ? and type = ?))";
 
         //type 3 block
         List<Integer> type3 = new ArrayList<>();
@@ -132,6 +136,7 @@ public class MainController {
         m.addAttribute("friends", allFriends);
         List<User> allNei = allNei(user);
         m.addAttribute("neighbors", allNei);
+        m.addAttribute("message","nmsl");
         return "main/main";
     }
 

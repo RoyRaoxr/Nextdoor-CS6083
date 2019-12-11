@@ -27,10 +27,14 @@ public class Message {
 
     @OneToOne
     @JoinColumn(name = "author")
+    @Getter
+    @Setter
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "tid")
+    @Setter
+    @Getter
     private MsgThread msgThread;
 
     @Column(name = "title")

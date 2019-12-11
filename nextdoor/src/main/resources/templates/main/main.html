@@ -198,7 +198,7 @@
 
     var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
     var recs = [];
-    $.get("http://localhost:9999/nextdoor/ping", {"uid": message}, function (data) {
+    $.get("http://localhost:9999/nextdoor/fetchblock", {"uid": message}, function (data) {
       console.log(data);
       var rectangle = new google.maps.Rectangle({
         strokeColor: '#FF0000',

@@ -1,21 +1,25 @@
 package edu.nyu.cs6083.nextdoor.controller;
 
 
+import edu.nyu.cs6083.nextdoor.bean.Block;
 import edu.nyu.cs6083.nextdoor.bean.Message;
 import edu.nyu.cs6083.nextdoor.bean.User;
+import edu.nyu.cs6083.nextdoor.dao.BlockDao;
 import edu.nyu.cs6083.nextdoor.dao.MessageDao;
 import edu.nyu.cs6083.nextdoor.dao.ThreadDao;
 import edu.nyu.cs6083.nextdoor.dao.UserDao;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainController {
@@ -136,7 +140,7 @@ public class MainController {
         m.addAttribute("friends", allFriends);
         List<User> allNei = allNei(user);
         m.addAttribute("neighbors", allNei);
-        m.addAttribute("message","nmsl");
+        m.addAttribute("message", "nmsl");
         return "main/main";
     }
 
@@ -157,16 +161,4 @@ public class MainController {
 
     }
 
-//    @Autowired
-//    MessageDao dao;
-//
-//    @GetMapping("/ping")
-//    public void pong() {
-//
-//        List<Message> message = dao.findAll();
-//
-//        for (Message m : message) {
-//            System.out.println(m);
-//        }
-//    }
 }

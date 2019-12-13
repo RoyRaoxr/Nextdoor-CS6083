@@ -38,13 +38,22 @@
   <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav ml-auto mr-5">
       <li class="nav-item active">
-        <a class="nav-link" href="">Dashboard <span class="sr-only">(current)</span></a>
+        <a class="nav-link" th:href="@{/main}">Main</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/map}">Map</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/message}">Messages</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" th:href="@{/friends}">Friends</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" th:href="@{/neighbors}">Neighbors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/block}">Blocks</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -66,10 +75,10 @@
   <div
       class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm col-md-12">
     <div class="lh-100">
-      <h6 class="mb-0 text-white lh-100"
-          th:text="'Hi，' + ${session.useradmin.getFirstname()}"></h6>
-      <small
-          th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></small>
+      <h5 class="mb-0 text-white lh-100"
+          th:text="'Hi，' + ${session.useradmin.getFirstname()}"></h5>
+      <large
+          th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></large>
     </div>
   </div>
   <div class="row">
@@ -124,6 +133,12 @@
                    th:value="allblock">
             <label class="form-check-label" for="exampleRadios4">
               Your Block
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="mapCheck">
+            <label class="form-check-label" for="mapCheck">
+              Add a location
             </label>
           </div>
         </div>

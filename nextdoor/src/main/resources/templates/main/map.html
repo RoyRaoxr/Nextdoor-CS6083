@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Simple Map</title>
   <meta name="viewport" content="initial-scale=1.0">
   <meta charset="utf-8">
+  <script th:src="@{/js/offcanvas.js}"></script>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
           integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
@@ -13,65 +18,125 @@
           crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
-<div class="row">
-  <div class="my-3 p-3 bg-white rounded shadow-sm col-md-7">
-    <div id="map" style="width:600px; height: 600px;"></div>
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  <a class="navbar-brand ml-5 mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
+  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse">
+    <form class="form-inline w-100 ml-3 my-2 my-lg-0">
+      <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread"
+             aria-label="Search">
+      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search"
+              type="submit">Search
+      </button>
+    </form>
   </div>
-</div>
-<script th:inline="javascript">
 
-  var map;
+  <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav ml-auto mr-5">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/main}">Main</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/map}">Map</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/message}">Messages</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/friends}">Friends</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/neighbors}">Neighbors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/block}">Blocks</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Profile & Settings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" th:href="@{/profile}">Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" th:href="@{/logout}">Sign Out</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+<main role="main" class="container">
+  <div class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm col-md-12">
+    <div class="lh-100">
+      <h5 class="mb-0 text-white lh-100"
+          th:text="'Hi，' + ${session.useradmin.getFirstname()}"></h5>
+      <large
+              th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></large>
+    </div>
+  </div>
 
-  function initMap() {
+  <div class="my-3 p-3 bg-white rounded shadow-sm col-md-12">
+      <div id="map" style="width:1000px; height: 600px;">
+      </div>
+  </div>
+</main>
+  <script th:inline="javascript">
 
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 40.730610, lng: -73.935242},
-      zoom: 12
-    });
+    var map;
 
-    var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
-    $.get("http://localhost:9999/nextdoor/fetchblock", {"uid": message}, function (data) {
-      console.log(data);
-      var rectangle = new google.maps.Rectangle({
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#FF0000',
-        fillOpacity: 0.35,
-        map: map,
-        bounds: {
-          north: data['ne_lat'], // ne_lat
-          south: data['sw_lat'], // sw_lat
-          east: data['ne_lng'], // ne_lng
-          west: data['sw_lng'] // sw_lng
-        }
+    function initMap() {
+
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 40.730610, lng: -73.935242},
+        zoom: 12
       });
-    })
 
-    $.get("http://localhost:9999/nextdoor/fetchhood", {"uid": message}, function (data) {
-      console.log(data);
-      var rectangle = new google.maps.Rectangle({
-        strokeColor: '#2169ff',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#3a5fff',
-        fillOpacity: 0.35,
-        map: map,
-        bounds: {
-          north: data['ne_lat'], // ne_lat
-          south: data['sw_lat'], // sw_lat
-          east: data['ne_lng'], // ne_lng
-          west: data['sw_lng'] // sw_lng
-        }
-      });
-    })
+      var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
+      $.get("http://localhost:9999/nextdoor/fetchblock", {"uid": message}, function (data) {
+        console.log(data);
+        var rectangle = new google.maps.Rectangle({
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          map: map,
+          bounds: {
+            north: data['ne_lat'], // ne_lat
+            south: data['sw_lat'], // sw_lat
+            east: data['ne_lng'], // ne_lng
+            west: data['sw_lng'] // sw_lng
+          }
+        });
+      })
 
-  }
-</script>
-<script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
-    async defer></script>
+      $.get("http://localhost:9999/nextdoor/fetchhood", {"uid": message}, function (data) {
+        console.log(data);
+        var rectangle = new google.maps.Rectangle({
+          strokeColor: '#2169ff',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#3a5fff',
+          fillOpacity: 0.35,
+          map: map,
+          bounds: {
+            north: data['ne_lat'], // ne_lat
+            south: data['sw_lat'], // sw_lat
+            east: data['ne_lng'], // ne_lng
+            west: data['sw_lng'] // sw_lng
+          }
+        });
+      })
+
+    }
+  </script>
+  <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
+      async defer></script>
 </body>
 </html>

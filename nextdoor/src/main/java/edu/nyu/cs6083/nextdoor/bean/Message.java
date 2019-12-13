@@ -29,7 +29,7 @@ public class Message {
     @JoinColumn(name = "author")
     @Getter
     @Setter
-    private User user;
+    private User author;
 
     @ManyToOne
     @JoinColumn(name = "tid")
@@ -52,6 +52,13 @@ public class Message {
     @Setter
     private String text;
 
+
+    @OneToOne
+    @JoinColumn(name = "replyid")
+    @Getter
+    @Setter
+    private Message replyid;
+
     @Column(name = "lat")
     @Getter
     @Setter
@@ -62,15 +69,17 @@ public class Message {
     @Setter
     private Float lng;
 
+
     @Override
     public String toString() {
         return "Message{" +
             "mid=" + mid +
-            ", user=" + user +
+            ", author=" + author +
             ", msgThread=" + msgThread +
             ", title='" + title + '\'' +
             ", timestamp=" + timestamp +
             ", text='" + text + '\'' +
+            ", replyid=" + replyid +
             ", lat=" + lat +
             ", lng=" + lng +
             '}';

@@ -61,6 +61,7 @@
   </div>
 </nav>
 
+
 <main role="main" class="container">
   <div class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm">
     <div class="lh-100">
@@ -70,51 +71,84 @@
     </div>
   </div>
   <div class="my-3 p-3 bg-white rounded shadow-sm">
-    <h6 class="border-bottom border-gray pb-2 mb-0">Friends message</h6>
-    <div class="media text-muted pt-3" th:each="t : ${t1}">
+    <h5 class="border-bottom border-gray pb-2 mb-0" th:text="${msg.getTitle()}">Initial Message
+      Title </h5>
+    <div class="media text-muted pt-4">
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
+        <strong class="d-block text-gray-dark" th:text="${msg.getText()}">
+          Initial Messge Text
         </strong>
       </p>
     </div>
-  </div>
-
-  <div class="my-3 p-3 bg-white rounded shadow-sm">
-    <h6 class="border-bottom border-gray pb-2 mb-0">Block message</h6>
-    <div class="media text-muted pt-3" th:each="t : ${t3}">
-      <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
-        </strong>
-      </p>
+    <div class="col-ml">
+      <button type="button" class="btn btn-sm my-2 btn-primary" data-toggle="modal"
+              data-target="#exampleModal" .bd-example-modal-lg>
+        Reply
+      </button>
     </div>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded shadow-sm">
-    <h6 class="border-bottom border-gray pb-2 mb-0">Hood message</h6>
-    <div class="media text-muted pt-3" th:each="t : ${t2}">
-
+  <div class="my-3 p-3 bg-white rounded shadow-sm" th:each="m : ${all}">
+    <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${m.getTitle()}">other Title </h6>
+    <div class="media text-muted pt-3">
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
+        <strong class="d-block text-gray-dark"
+                th:text="${m.getAuthor().getFirstname()}+': @'+${m.getReplyid().getAuthor().getFirstname()}+' '+${m.getText()}">
+          Tracy:@author Messge Text
         </strong>
       </p>
     </div>
+    <div class="col-ml">
+      <button type="button" class="my-2 btn-sm btn btn-primary" data-toggle="modal"
+              data-target="#exampleModal" .bd-example-modal-lg>
+        Reply
+      </button>
+    </div>
   </div>
-
-  <div class="my-3 p-3 bg-white rounded shadow-sm">
-    <h6 class="border-bottom border-gray pb-2 mb-0">Neighbors message</h6>
-    <div class="media text-muted pt-3" th:each="t : ${t0}">
-
-      <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark">
-          <a th:href="@{/xxxxx(tid=${t.getMsgThread().getTid()})}" th:text="${t.getTitle()}"></a>
-        </strong>
-      </p>
+  <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Reply message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="ml-3 my-3 p-3 bg-white col-md-5">
+              <form>
+                <div class="form-group col-md">
+                  <label for="inputTitle">Title:</label>
+                  <input type="text" class="form-control" id="inputTitle" name="title">
+                </div>
+                <div class="form-row col-md">
+                  <label for="inputText">Content:</label>
+                  <textarea class="form-control" rows="8" id="inputText" name="content"></textarea>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="mapCheck">
+                  <label class="form-check-label" for="mapCheck">
+                    Add a location
+                  </label>
+                </div>
+              </form>
+            </div>
+            <div class="my-3 p-3 bg-white rounded shadow-sm col-md-5">
+              <div id="map" style="width:400px; height: 400px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Send message</button>
+        </div>
+      </div>
     </div>
   </div>
 </main>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

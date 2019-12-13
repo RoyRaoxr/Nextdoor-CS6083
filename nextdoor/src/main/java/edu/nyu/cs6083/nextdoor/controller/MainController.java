@@ -140,7 +140,6 @@ public class MainController {
         m.addAttribute("friends", allFriends);
         List<User> allNei = allNei(user);
         m.addAttribute("neighbors", allNei);
-        m.addAttribute("message", "nmsl");
         return "main/main";
     }
 

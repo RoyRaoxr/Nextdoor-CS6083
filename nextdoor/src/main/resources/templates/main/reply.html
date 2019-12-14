@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Nextdoor - CS6083</title>
   <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
@@ -89,23 +88,23 @@
     </div>
   </div>
 
-  <div class="my-3 p-3 bg-white rounded shadow-sm" th:each="m : ${all}">
-    <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${m.getTitle()}">other Title </h6>
-    <div class="media text-muted pt-3">
-      <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark"
-                th:text="${m.getAuthor().getFirstname()}+': @'+${m.getReplyid().getAuthor().getFirstname()}+' '+${m.getText()}">
-          Tracy:@author Messge Text
-        </strong>
-      </p>
-    </div>
-    <div class="col-ml">
-      <button type="button" class="my-2 btn-sm btn btn-primary" data-toggle="modal"
-              data-target="#exampleModal" .bd-example-modal-lg>
-        Reply
-      </button>
-    </div>
-  </div>
+  <!--  <div class="my-3 p-3 bg-white rounded shadow-sm" th:each="m : ${all}">-->
+  <!--    <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${m.getTitle()}">other Title </h6>-->
+  <!--    <div class="media text-muted pt-3">-->
+  <!--      <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">-->
+  <!--        <strong class="d-block text-gray-dark" id="mid" th:value="${m.getMid()}"-->
+  <!--                th:text="${m.getAuthor().getFirstname()}+': @'+${m.getReplyid().getAuthor().getFirstname()}+' '+${m.getText()}">-->
+  <!--          Tracy:@author Messge Text-->
+  <!--        </strong>-->
+  <!--      </p>-->
+  <!--    </div>-->
+  <!--    <div class="col-ml">-->
+  <!--      <button type="button" class="my-2 btn-sm btn btn-primary" data-toggle="modal"-->
+  <!--              data-target="#exampleModal" .bd-example-modal-lg>-->
+  <!--        Reply-->
+  <!--      </button>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
   <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
        aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -120,7 +119,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="ml-3 my-3 p-3 bg-white col-md-5">
-              <form th:action="@{/main}" method="get">
+              <form id="replyform">
                 <div class="form-group col-md">
                   <label for="inputTitle">Title:</label>
                   <input type="text" class="form-control" id="inputTitle" name="title">
@@ -144,16 +143,20 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="btnsend">Send message</button>
+          <button type="button" class="btn btn-primary" id="btnsend" th:onclick="reply()">Send
+            message
+          </button>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<script th:inline="javascript">
+<script th:inline="javascript" type="text/javascript">
 
   var map;
+  var lat;
+  var lng;
 
   function initMap() {
 
@@ -162,35 +165,10 @@
       zoom: 12
     });
 
-    var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
-    var recs = [];
-    // $.get("http://localhost:9999/nextdoor/fetchblock", {"uid": message}, function (data) {
-    //   console.log(data);
-    //   var rectangle = new google.maps.Rectangle({
-    //     strokeColor: '#FF0000',
-    //     strokeOpacity: 0.8,
-    //     strokeWeight: 2,
-    //     fillColor: '#FF0000',
-    //     fillOpacity: 0.35,
-    //     map: map,
-    //     bounds: {
-    //       north: data['ne_lat'], // ne_lat
-    //       south: data['sw_lat'], // sw_lat
-    //       east: data['ne_lng'], // ne_lng
-    //       west: data['sw_lng'] // sw_lng
-    //     }
-    //   });
-    // })
-     $("btnsend").click(function () {
-
-      $.post("http://localhost:9999/nextdoor/replymsg", function (data, status) {
-        alert(data, status);
-      });
-    });
     var marker = null;
     google.maps.event.addListener(map, 'click', function (event) {
-      var lat = event.latLng.lat();
-      var lng = event.latLng.lng();
+      lat = event.latLng.lat();
+      lng = event.latLng.lng();
 
       // remove previous Marker
       if (marker != null) {
@@ -203,11 +181,47 @@
       });
       // attach Marker instance to Map instance
       marker.setMap(map);
-
-      // if you also want to change the value of FORM, you can add a hidden input in form, and change value using javascript doom:
-      console.log(lat);
-      console.log(lng);
     });
+
+    reply = function () {
+      var title = $('#inputTitle').val();
+      var content = $('#inputText').val();
+      var replymid = /*[[${msg.getMid()}]]*/ '';
+      var tid = /*[[${msg.getMsgThread().getTid()}]]*/'';
+      var author = /*[[${msg.getAuthor().getUid()}]]*/'';
+
+      if ($('#mapCheck').is(':checked')) {
+        $.post(
+            "http://localhost:9999/nextdoor/replymsg",
+            {
+              "title": title,
+              "content": content,
+              "lat": lat,
+              "lng": lng,
+              "replymid": replymid,
+              "tid": tid,
+              "author": author
+            },
+            function (data) {
+              window.location.href = "http://localhost:9999/nextdoor/message";
+            }
+        );
+      } else {
+        $.post(
+            "http://localhost:9999/nextdoor/replymsg",
+            {
+              "title": title,
+              "content": content,
+              "replymid": replymid,
+              "tid": tid,
+              "author": author
+            },
+            function (data) {
+              window.location.href = "http://localhost:9999/nextdoor/message";
+            }
+        );
+      }
+    }
 
   }
 
@@ -216,9 +230,7 @@
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
     async defer></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
         integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
         crossorigin="anonymous"></script>

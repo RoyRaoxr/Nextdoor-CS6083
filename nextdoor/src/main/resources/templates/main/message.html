@@ -74,7 +74,7 @@
     <div class="media text-muted pt-3" th:each="t : ${t1}">
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
+          <a th:href="@{/reply(id=${t.getMid()})}" th:text="${t.getTitle()}"></a>
         </strong>
       </p>
     </div>
@@ -85,7 +85,7 @@
     <div class="media text-muted pt-3" th:each="t : ${t3}">
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
+          <a th:href="@{/reply(id=${t.getMid()})}" th:text="${t.getTitle()}"></a>
         </strong>
       </p>
     </div>
@@ -97,7 +97,7 @@
 
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
+          <a th:href="@{/reply(id=${t.getMid()})}" th:text="${t.getTitle()}"></a>
         </strong>
       </p>
     </div>
@@ -109,7 +109,7 @@
 
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">
-          <a th:href="@{/xxxxx(tid=${t.getMsgThread().getTid()})}" th:text="${t.getTitle()}"></a>
+          <a th:href="@{/reply(id=${t.getMid()})}" th:text="${t.getTitle()}"></a>
         </strong>
       </p>
     </div>

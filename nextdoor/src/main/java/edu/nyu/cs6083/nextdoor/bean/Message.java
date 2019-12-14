@@ -31,6 +31,7 @@ public class Message {
     @Setter
     private User author;
 
+
     @ManyToOne
     @JoinColumn(name = "tid")
     @Setter
@@ -62,24 +63,30 @@ public class Message {
     @Column(name = "lat")
     @Getter
     @Setter
-    private Float lat;
+    private Double lat;
 
     @Column(name = "lng")
     @Getter
     @Setter
-    private Float lng;
+    private Double lng;
 
 
     @Override
     public String toString() {
+        String rid = "";
+        if (replyid != null) {
+            rid = String.valueOf(replyid.getMid());
+        } else {
+            rid = "";
+        }
         return "Message{" +
             "mid=" + mid +
             ", author=" + author +
-            ", msgThread=" + msgThread +
+            ", msgThread=" + msgThread.getTid() +
             ", title='" + title + '\'' +
             ", timestamp=" + timestamp +
             ", text='" + text + '\'' +
-            ", replyid=" + replyid +
+            ", replyid=" + rid +
             ", lat=" + lat +
             ", lng=" + lng +
             '}';

@@ -7,6 +7,7 @@ import edu.nyu.cs6083.nextdoor.dao.ThreadDao;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,9 +53,29 @@ public class MessageController {
         return "main/reply";
     }
 
-    @PostMapping("replysmsg")
-    public @ResponseBody String replyMsg() {
-        return "NMSL";
+    @PostMapping("replymsg")
+    public @ResponseBody
+    String replyMsg(@RequestParam Map<String, String> map) {
+        String sql =
+            "Insert into message (`tid`, `author`, `title`, `timestamp`, `text`, `replyid`, `lat`,`lng`) "
+                + "Values (?, ?, ?, now(), ?, ?,?, ?)";
+
+        Integer tid = Integer.valueOf(map.get("tid"));
+        String title = map.get("title");
+        int replymid = Integer.valueOf(map.get("replymid"));
+        Integer author = Integer.valueOf(map.get("author"));
+        String text = map.get("content");
+
+        if (!map.containsKey("lat")) {
+            jdbcTemplate.update(sql, tid, author, title, text, replymid, 0, 0);
+        } else {
+            Double lat = Double.valueOf(map.get("lat"));
+            Double lng = Double.valueOf(map.get("lng"));
+            jdbcTemplate
+                .update(sql, tid, author, title, text, replymid, map.get("lat"), map.get("lng"));
+        }
+
+        return "redirect:message";
     }
 
     @GetMapping("message")
@@ -119,5 +140,87 @@ public class MessageController {
         m.addAttribute("t1", type1s);
         m.addAttribute("t0", type0s);
         return "main/message";
+    }
+
+    @PostMapping("/sendmessage")
+    public String send(@RequestParam Map<String, String> data, HttpServletRequest request) {
+        String state = data.get("select");
+        User user = (User) request.getSession().getAttribute("useradmin");
+
+        switch (state) {
+            case "toneighbor":
+                insertMessage(0, data, user);
+                break;
+            case "tofriend":
+                insertMessage(1, data, user);
+                break;
+            case "allblock":
+                insertMessage(3, data, user);
+                break;
+            case "allhood":
+                insertMessage(2, data, user);
+                break;
+        }
+
+        return "redirect:main";
+    }
+
+    private void insertMessage(int type, Map<String, String> data, User user) {
+        String s1 = "INSERT INTO `nextdoor`.`thread`(`subject`, `type`) VALUES (?, ?);";
+        String s2 =
+            "Insert into message (`tid`, `author`, `title`, `timestamp`, `text`, `lat`,`lng`) "
+                + "Values (?, ?, ?, now(), ?, ?, ?)";
+        String s3 = "Insert into threadparticipant values(?, ?)";
+
+        int recvid = Integer.MIN_VALUE;
+
+        jdbcTemplate.update(s1, data.get("title"), type);
+
+        int tid = jdbcTemplate
+            .queryForObject("select tid from thread where tid = (select max(tid) from thread)",
+                Integer.class);
+
+        jdbcTemplate.update(s2, tid, user.getUid(), data.get("title"), data.get("content"), 0, 0);
+
+        if (type == 1) {
+            recvid = Integer.valueOf(data.get("tofriend"));
+            jdbcTemplate.update(s3, tid, recvid);
+        } else if (type == 0) {
+            recvid = Integer.valueOf(data.get("toneighbor"));
+            jdbcTemplate.update(s3, tid, recvid);
+        } else if (type == 2) {
+            String s5 = "select uid from joinblock natural join block "
+                + "where nid = (select nid from joinblock natural join block where uid = ?)";
+            List<Integer> ids = new ArrayList<>();
+            jdbcTemplate.query(con -> {
+                PreparedStatement ps = con.prepareStatement(s5);
+                ps.setInt(1, user.getUid());
+                return ps;
+            }, rs -> {
+                ids.add(rs.getInt("uid"));
+            });
+
+            for (int id : ids) {
+                jdbcTemplate.update(s3, tid, id);
+            }
+
+        } else if (type == 3) {
+            String s4 = "select uid from joinblock where bid = (select bid from joinblock where uid = ?)";
+            List<Integer> ids = new ArrayList<>();
+
+            jdbcTemplate.query(con -> {
+                PreparedStatement ps = con.prepareStatement(s4);
+                ps.setInt(1, user.getUid());
+                return ps;
+            }, rs -> {
+                ids.add(rs.getInt("uid"));
+            });
+
+            for (int id : ids) {
+                jdbcTemplate.update(s3, tid, id);
+            }
+        }
+
+
     }
 }

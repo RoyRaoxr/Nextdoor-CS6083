@@ -4,7 +4,7 @@
   <title>Simple Map</title>
   <meta name="viewport" content="initial-scale=1.0">
   <meta charset="utf-8">
-  <script th:src="@{/js/offcanvas.js}"></script>
+
   <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
@@ -18,6 +18,8 @@
           crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" media="all" th:href="@{/css/offcanvas.css}">
+  <script th:src="@{/js/offcanvas.js}"></script>
 
 </head>
 <body>
@@ -71,72 +73,100 @@
   </div>
 </nav>
 <main role="main" class="container">
-  <div class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm col-md-12">
+  <div
+      class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm">
     <div class="lh-100">
       <h5 class="mb-0 text-white lh-100"
           th:text="'Hi，' + ${session.useradmin.getFirstname()}"></h5>
       <large
-              th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></large>
+          th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></large>
     </div>
   </div>
 
   <div class="my-3 p-3 bg-white rounded shadow-sm col-md-12">
-      <div id="map" style="width:1000px; height: 600px;">
-      </div>
+    <div id="map" style="width:1070px; height: 600px;">
+    </div>
   </div>
 </main>
-  <script th:inline="javascript">
+<script th:inline="javascript">
 
-    var map;
+  var map;
 
-    function initMap() {
+  function initMap() {
 
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 40.730610, lng: -73.935242},
-        zoom: 12
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.730610, lng: -73.935242},
+      zoom: 12
+    });
+
+    var uid = /*[[${session.useradmin.getUid()}]]*/ 'default';
+    $.get("http://localhost:9999/nextdoor/fetchmessage", {"uid": uid}, function (data) {
+
+      for (i = 0; i < data.length; i++) {
+        var location = new google.maps.LatLng(data[i]['lat'], data[i]['lng']);
+        marker = new google.maps.Marker({
+          position: location,
+          label: 'M',
+          color: '#ffe200',
+          map: map,
+          title: data[i]['title']
+        });
+      }
+
+    })
+
+    $.get("http://localhost:9999/nextdoor/fetchuser", {"uid": uid}, function (data) {
+      for (i = 0; i < data.length; i++) {
+        var location = new google.maps.LatLng(data[i]['lat'], data[i]['lng']);
+        marker = new google.maps.Marker({
+          position: location,
+          label: 'U',
+          color: '#ffe200',
+          map: map
+        });
+      }
+    })
+
+    $.get("http://localhost:9999/nextdoor/fetchblock", {"uid": uid}, function (data) {
+
+      var rectangle = new google.maps.Rectangle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        bounds: {
+          north: data['ne_lat'], // ne_lat
+          south: data['sw_lat'], // sw_lat
+          east: data['ne_lng'], // ne_lng
+          west: data['sw_lng'] // sw_lng
+        }
       });
+    })
 
-      var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
-      $.get("http://localhost:9999/nextdoor/fetchblock", {"uid": message}, function (data) {
-        console.log(data);
-        var rectangle = new google.maps.Rectangle({
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          map: map,
-          bounds: {
-            north: data['ne_lat'], // ne_lat
-            south: data['sw_lat'], // sw_lat
-            east: data['ne_lng'], // ne_lng
-            west: data['sw_lng'] // sw_lng
-          }
-        });
-      })
+    $.get("http://localhost:9999/nextdoor/fetchhood", {"uid": uid}, function (data) {
 
-      $.get("http://localhost:9999/nextdoor/fetchhood", {"uid": message}, function (data) {
-        console.log(data);
-        var rectangle = new google.maps.Rectangle({
-          strokeColor: '#2169ff',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#3a5fff',
-          fillOpacity: 0.35,
-          map: map,
-          bounds: {
-            north: data['ne_lat'], // ne_lat
-            south: data['sw_lat'], // sw_lat
-            east: data['ne_lng'], // ne_lng
-            west: data['sw_lng'] // sw_lng
-          }
-        });
-      })
+      var rectangle = new google.maps.Rectangle({
+        strokeColor: '#2169ff',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#3a5fff',
+        fillOpacity: 0.35,
+        map: map,
+        bounds: {
+          north: data['ne_lat'], // ne_lat
+          south: data['sw_lat'], // sw_lat
+          east: data['ne_lng'], // ne_lng
+          west: data['sw_lng'] // sw_lng
+        }
+      });
+    })
 
-    }
-  </script>
-  <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
-      async defer></script>
+  }
+</script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
+    async defer></script>
 </body>
 </html>

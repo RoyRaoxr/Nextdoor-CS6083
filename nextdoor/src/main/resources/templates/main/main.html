@@ -168,7 +168,7 @@
     <div class="media text-muted pt-3" th:each="t : ${t3}">
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
+          <a th:href="@{/reply(id=${t.getMid()})}" th:text="${t.getTitle()}"></a>
         </strong>
       </p>
     </div>
@@ -180,7 +180,7 @@
 
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">
-          <a th:href="@{/reply}" th:text="${t.getTitle()}"></a>
+          <a th:href="@{/reply(id=${t.getMid()})}" th:text="${t.getTitle()}"></a>
         </strong>
       </p>
     </div>
@@ -192,7 +192,7 @@
 
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
         <strong class="d-block text-gray-dark">
-          <a th:href="@{/xxxxx(tid=${t.getMsgThread().getTid()})}" th:text="${t.getTitle()}"></a>
+          <a th:href="@{/reply(id=${t.getMid()})}" th:text="${t.getTitle()}"></a>
         </strong>
       </p>
     </div>
@@ -213,23 +213,7 @@
 
     var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
     var recs = [];
-    // $.get("http://localhost:9999/nextdoor/fetchblock", {"uid": message}, function (data) {
-    //   console.log(data);
-    //   var rectangle = new google.maps.Rectangle({
-    //     strokeColor: '#FF0000',
-    //     strokeOpacity: 0.8,
-    //     strokeWeight: 2,
-    //     fillColor: '#FF0000',
-    //     fillOpacity: 0.35,
-    //     map: map,
-    //     bounds: {
-    //       north: data['ne_lat'], // ne_lat
-    //       south: data['sw_lat'], // sw_lat
-    //       east: data['ne_lng'], // ne_lng
-    //       west: data['sw_lng'] // sw_lng
-    //     }
-    //   });
-    // })
+
 
     var marker = null;
     google.maps.event.addListener(map, 'click', function (event) {

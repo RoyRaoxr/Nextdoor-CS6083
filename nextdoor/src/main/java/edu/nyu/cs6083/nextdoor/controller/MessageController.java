@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -146,7 +147,7 @@ public class MessageController {
     public String send(@RequestParam Map<String, String> data, HttpServletRequest request) {
         String state = data.get("select");
         User user = (User) request.getSession().getAttribute("useradmin");
-
+        System.out.println(data);
         switch (state) {
             case "toneighbor":
                 insertMessage(0, data, user);
@@ -159,6 +160,36 @@ public class MessageController {
                 break;
             case "allhood":
                 insertMessage(2, data, user);
+                break;
+            case "allfriend":
+                String sql = "select friendid from friends where userid = ?";
+                List<Integer> fids = new ArrayList<>();
+                jdbcTemplate.query(con -> {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setInt(1, user.getUid());
+                    return ps;
+                }, rs -> {
+                    fids.add(rs.getInt("friendid"));
+                });
+
+                String s1 = "INSERT INTO `nextdoor`.`thread`(`subject`, `type`) VALUES (?, ?);";
+                String s2 =
+                    "Insert into message (`tid`, `author`, `title`, `timestamp`, `text`, `lat`,`lng`) "
+                        + "Values (?, ?, ?, now(), ?, ?, ?)";
+                String s3 = "Insert into threadparticipant values(?, ?)";
+
+                jdbcTemplate.update(s1, data.get("title"), 1);
+
+                int tid = jdbcTemplate
+                    .queryForObject(
+                        "select tid from thread where tid = (select max(tid) from thread)",
+                        Integer.class);
+
+                jdbcTemplate
+                    .update(s2, tid, user.getUid(), data.get("title"), data.get("content"), 0, 0);
+                for (int id : fids) {
+                    jdbcTemplate.update(s3, tid, id);
+                }
                 break;
         }
 
@@ -191,6 +222,23 @@ public class MessageController {
         } else if (type == 2) {
             String s5 = "select uid from joinblock natural join block "
                 + "where nid = (select nid from joinblock natural join block where uid = ?)";
+
+            String s6 = "SELECT bid from block where nid = (select nid from joinblock natural join block where uid = ?)";
+            String s7 = "INSERT INTO `nextdoor`.`threadblock`(`tid`, `bid`) VALUES (?,?)";
+
+            List<Integer> bids = new ArrayList<>();
+            jdbcTemplate.query(con -> {
+                PreparedStatement ps = con.prepareStatement(s6);
+                ps.setInt(1, user.getUid());
+                return ps;
+            }, rs -> {
+                bids.add(rs.getInt("bid"));
+            });
+
+            for (int id : bids) {
+                jdbcTemplate.update(s7, tid, id);
+            }
+
             List<Integer> ids = new ArrayList<>();
             jdbcTemplate.query(con -> {
                 PreparedStatement ps = con.prepareStatement(s5);
@@ -206,6 +254,18 @@ public class MessageController {
 
         } else if (type == 3) {
             String s4 = "select uid from joinblock where bid = (select bid from joinblock where uid = ?)";
+            String s5 = "select bid from joinblock where uid = ?";
+            String s6 = "INSERT INTO `nextdoor`.`threadblock`(`tid`, `bid`) VALUES (?,?)";
+
+            AtomicInteger bid = new AtomicInteger();
+            jdbcTemplate.query(con -> {
+                PreparedStatement ps = con.prepareStatement(s5);
+                ps.setInt(1, user.getUid());
+                return ps;
+            }, rs -> {
+                bid.set(rs.getInt("bid"));
+            });
+
             List<Integer> ids = new ArrayList<>();
 
             jdbcTemplate.query(con -> {
@@ -219,6 +279,8 @@ public class MessageController {
             for (int id : ids) {
                 jdbcTemplate.update(s3, tid, id);
             }
+
+            jdbcTemplate.update(s6, tid, bid.get());
         }
 
 

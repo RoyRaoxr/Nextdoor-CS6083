@@ -81,6 +81,7 @@
           th:text="${session.useradmin.getUstreet()} + ', '+${session.useradmin.getUcity()} + ', '+ ${session.useradmin.getUstate()}"></large>
     </div>
   </div>
+
   <div class="row">
     <div class="my-3 p-3 bg-white rounded shadow-sm col-md-7">
       <form th:action="@{/sendmessage}" method="post">
@@ -105,7 +106,6 @@
                       th:text="${n.getFirstname()} +' '+${n.getLastname()}"
                       th:value="${n.getUid()}"
               ></option>
-              <option th:value="all">All Neighbors</option>
             </select>
           </div>
           <div class="form-check">
@@ -118,7 +118,6 @@
               <option th:each="n:${friends}"
                       th:text="${n.getFirstname()} +' '+${n.getLastname()}"
                       th:value="${n.getUid()}"></option>
-              <option th:value="all">All Friends</option>
             </select>
           </div>
           <div class="form-check">
@@ -133,6 +132,13 @@
                    th:value="allblock">
             <label class="form-check-label" for="exampleRadios4">
               Your Block
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" th:name="select" id="exampleRadios4"
+                   th:value="allfriend">
+            <label class="form-check-label" for="exampleRadios4">
+              All YOUR Friends
             </label>
           </div>
           <div class="form-check">
@@ -214,7 +220,6 @@
     var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
     var recs = [];
 
-
     var marker = null;
     google.maps.event.addListener(map, 'click', function (event) {
       var lat = event.latLng.lat();
@@ -244,7 +249,6 @@
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
     async defer></script>
-
 </body>
 </html>
 

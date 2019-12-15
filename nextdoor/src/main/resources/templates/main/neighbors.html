@@ -90,6 +90,7 @@
             <strong class="text-gray-dark"
                     th:text="${nei.getFirstname()}+' ' + ${nei.getLastname()}">Full
               Name</strong>
+            <a th:href="@{/deleteneighbors(id=${nei.getUid()})}">Delete</a>
           </div>
           <span class="d-block"
                 th:text="${nei.getUstreet()} + ', '+${nei.getUcity()} + ', '+ ${nei.getUstate()}"></span>

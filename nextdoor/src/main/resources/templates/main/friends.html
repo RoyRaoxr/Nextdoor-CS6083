@@ -136,6 +136,7 @@
             <strong class="text-gray-dark"
                     th:text="${friend.getFirstname()}+' ' + ${friend.getLastname()}">Full
               Name</strong>
+            <a th:href="@{/deletefriend(id=${friend.getUid()})}">Delete</a>
           </div>
           <span class="d-block"
                 th:text="${friend.getUstreet()} + ', '+${friend.getUcity()} + ', '+ ${friend.getUstate()}"></span>

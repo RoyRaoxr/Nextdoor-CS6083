@@ -4,12 +4,15 @@ package edu.nyu.cs6083.nextdoor.controller;
 import edu.nyu.cs6083.nextdoor.bean.User;
 import edu.nyu.cs6083.nextdoor.dao.FriendDao;
 import edu.nyu.cs6083.nextdoor.dao.UserDao;
+
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -163,6 +166,23 @@ public class SocialController {
 
     }
 
+    @GetMapping("/deletefriend")
+    public String deleteFriend(HttpServletRequest request, @RequestParam("id") Integer uid, Model m) {
+        User user = (User) request.getSession().getAttribute("useradmin");
+
+        String p = "call delete_friend(?,?)";
+        List<SqlParameter> ps = new ArrayList<>();
+        jdbcTemplate.call(con -> {
+            CallableStatement cs = con.prepareCall(p);
+            cs.setInt(1, user.getUid());
+            cs.setInt(2,uid);
+            return cs;
+        },ps);
+
+        return "redirect:/friends";
+
+    }
+
     @GetMapping("/addneighbors")
     public String addNeighbor(HttpServletRequest request, @RequestParam("id") Integer uid,
         Model m) {
@@ -171,6 +191,23 @@ public class SocialController {
         String sql = "Insert into neighbors values (?, ?)";
         //userDao.createFriendsApplication(user.getUid(), uid);
         jdbcTemplate.update(sql, user.getUid(), uid);
+        return "redirect:/neighbors";
+
+    }
+
+    @GetMapping("/deleteneighbors")
+    public String deleteNeighbor(HttpServletRequest request, @RequestParam("id") Integer uid, Model m) {
+        User user = (User) request.getSession().getAttribute("useradmin");
+
+        String p = "call delete_neighbors(?,?)";
+        List<SqlParameter> ps = new ArrayList<>();
+        jdbcTemplate.call(con -> {
+            CallableStatement cs = con.prepareCall(p);
+            cs.setInt(1, user.getUid());
+            cs.setInt(2,uid);
+            return cs;
+        },ps);
+
         return "redirect:/neighbors";
 
     }

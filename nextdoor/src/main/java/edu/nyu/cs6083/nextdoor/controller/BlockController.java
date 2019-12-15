@@ -70,9 +70,10 @@ public class BlockController {
             m.addAttribute("block", block);
             m.addAttribute("ex", true);
         }
-        List<Block> otherB = blockDao.findAll();
-
+        List<Block> otherB = blockDao.findAllCanJoin(user.getUid());
+        List<Block> appliedB = blockDao.findAllApplied(user.getUid());
         m.addAttribute("other", otherB);
+        m.addAttribute("applied", appliedB);
 
         return "main/block";
     }
@@ -112,7 +113,7 @@ public class BlockController {
         User user = (User) request.getSession().getAttribute("useradmin");
 
         Integer prevAid = jdbcTemplate
-            .queryForObject("select max(aid) from application", Integer.class);
+            .queryForObject("select COALESCE(max(aid),0) from application", Integer.class);
         String sql =
             "INSERT INTO `nextdoor`.`application`(`aid`, `uid`, `bid`, `timestamp`, `status`) "
                 + "VALUES (?, ?, ?, now(), 0)";

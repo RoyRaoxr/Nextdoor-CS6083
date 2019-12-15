@@ -126,13 +126,27 @@
 
     <!--        </div>-->
     <div class="my-3 p-3 bg-white rounded shadow-sm col-md-12">
-      <h6 class="border-bottom border-gray pb-2 mb-0">All Blocks</h6>
+      <h6 class="border-bottom border-gray pb-2 mb-0">All Blocks to join</h6>
       <div class="media text-muted pt-3" th:each="o : ${other}">
         <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
           <div class="d-flex justify-content-between align-items-center w-100">
             <strong class="text-gray-dark"
                     th:text="${o.getBname()}+', '+${o.getNeighborhood().getNname()}"></strong>
             <a th:href="@{/joinblock(id=${o.getBid()})}" th:if="!${ex}">Join</a>
+          </div>
+
+          <span class="d-block"></span>
+        </div>
+      </div>
+    </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm col-md-12">
+      <h6 class="border-bottom border-gray pb-2 mb-0">All applied Block</h6>
+      <div class="media text-muted pt-3" th:each="a : ${applied}">
+        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <strong class="text-gray-dark"
+                    th:text="${a.getBname()}+', '+${a.getNeighborhood().getNname()}"></strong>
+            <strong>Pending</strong>
           </div>
 
           <span class="d-block"></span>

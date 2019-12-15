@@ -135,7 +135,7 @@ public class SocialController {
             + "From joinblock natural join block \n"
             + "Where \n"
             + "nid = (Select nid From joinblock natural join block where uid = ?) and \n"
-            + "uid != ? and (uid not in (Select neighborid From neighbors Where userid = ? Union Select userid as neighborid From neighbors Where neighborid = ?))";
+            + "uid != ? and (uid not in (Select neighborid From neighbors Where userid = ?))";
 
         List<Integer> sameHood = new ArrayList<>();
         jdbcTemplate.query(con -> {
@@ -143,7 +143,6 @@ public class SocialController {
             ps.setInt(1, user.getUid());
             ps.setInt(2, user.getUid());
             ps.setInt(3, user.getUid());
-            ps.setInt(4, user.getUid());
             return ps;
         }, rs -> {
             sameHood.add(rs.getInt("uid"));

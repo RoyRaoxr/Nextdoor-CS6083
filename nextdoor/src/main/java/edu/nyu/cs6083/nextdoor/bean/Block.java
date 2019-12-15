@@ -14,46 +14,39 @@ import lombok.Setter;
 @Table(name = "block")
 public class Block {
 
-    public Block() {
-    }
-
     @Id
     @Getter
     @Setter
     @Column(name = "bid")
     private Integer bid;
-
-
     @OneToOne
     @JoinColumn(name = "nid")
     @Getter
     @Setter
     private Neighborhood neighborhood;
-
     @Getter
     @Setter
     @Column(name = "bname")
     private String bname;
-
     @Getter
     @Setter
     @Column(name = "sw_lng")
     private Float sw_lng;
-
     @Getter
     @Setter
     @Column(name = "sw_lat")
     private Float sw_lat;
-
     @Getter
     @Setter
     @Column(name = "ne_lat")
     private Float ne_lat;
-
     @Getter
     @Setter
     @Column(name = "ne_lng")
     private Float ne_lng;
+
+    public Block() {
+    }
 
     @Override
     public String toString() {

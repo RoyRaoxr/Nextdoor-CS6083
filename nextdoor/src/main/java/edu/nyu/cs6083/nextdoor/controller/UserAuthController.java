@@ -3,7 +3,8 @@ package edu.nyu.cs6083.nextdoor.controller;
 
 import edu.nyu.cs6083.nextdoor.bean.User;
 import edu.nyu.cs6083.nextdoor.dao.UserDao;
-
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Controller
 public class UserAuthController {
@@ -35,8 +34,9 @@ public class UserAuthController {
 
     @RequestMapping("/login")
     public String userLogin(@ModelAttribute User user, Model m,
-                            HttpServletRequest request) {
-        User currUser = userDao.findByUsernameAndPassword(user.getUsername(), DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        HttpServletRequest request) {
+        User currUser = userDao.findByUsernameAndPassword(user.getUsername(),
+            DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         if (currUser == null) {
             m.addAttribute("err", true);
             return "index";
@@ -48,7 +48,7 @@ public class UserAuthController {
 
     @GetMapping("/logout")
     public String userLogout(Model m, HttpServletRequest request) {
-        User currUser = (User)request.getSession().getAttribute("useradmin");
+        User currUser = (User) request.getSession().getAttribute("useradmin");
         if (currUser == null) {
             m.addAttribute("err", true);
             return "index";

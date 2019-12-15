@@ -8,6 +8,13 @@ import lombok.Setter;
 @Embeddable
 public class FriendsPK implements Serializable {
 
+    @Getter
+    @Setter
+    private Integer userid;
+    @Getter
+    @Setter
+    private Integer friendid;
+
     public FriendsPK() {
 
     }
@@ -16,12 +23,4 @@ public class FriendsPK implements Serializable {
         this.userid = userid;
         this.friendid = friendid;
     }
-
-    @Getter
-    @Setter
-    private Integer userid;
-
-    @Getter
-    @Setter
-    private Integer friendid;
 }

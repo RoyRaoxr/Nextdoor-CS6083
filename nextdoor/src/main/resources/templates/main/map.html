@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Simple Map</title>
-  <meta name="viewport" content="initial-scale=1.0">
+  <title>Nextdoor - MapView</title>
+  <meta content="initial-scale=1.0" name="viewport">
   <meta charset="utf-8">
 
-  <link rel="stylesheet"
+  <link crossorigin="anonymous"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-        crossorigin="anonymous">
+        rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+  <script crossorigin="anonymous"
           integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-          crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+          src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script crossorigin="anonymous"
           integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-          crossorigin="anonymous"></script>
+          src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <link rel="stylesheet" media="all" th:href="@{/css/offcanvas.css}">
+  <link media="all" rel="stylesheet" th:href="@{/css/offcanvas.css}">
   <script th:src="@{/js/offcanvas.js}"></script>
 
 </head>
 <body>
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
   <a class="navbar-brand ml-5 mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
-  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+  <button class="navbar-toggler p-0 border-0" data-toggle="offcanvas" type="button">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse">
-    <form class="form-inline w-100 ml-3 my-2 my-lg-0">
-      <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread"
-             aria-label="Search">
-      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search"
-              type="submit">Search
+    <form class="form-inline w-100 ml-3 my-2 my-lg-0" th:action="@{/search}" th:method="post">
+      <input aria-label="Search" class="form-control w-75 mr-sm-2" placeholder="Search thread"
+             th:name="keyword"
+             th:type="text">
+
+      <button class="btn btn-outline-light my-2 my-sm-0" th:type="submit">Search
       </button>
     </form>
   </div>
@@ -59,11 +60,11 @@
         <a class="nav-link" th:href="@{/block}">Blocks</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+           data-toggle="dropdown" href="#" id="navbarDropdownMenuLink">
           Profile & Settings
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <div aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu">
           <a class="dropdown-item" th:href="@{/profile}">Profile</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" th:href="@{/logout}">Sign Out</a>
@@ -72,7 +73,7 @@
     </ul>
   </div>
 </nav>
-<main role="main" class="container">
+<main class="container" role="main">
   <div
       class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm">
     <div class="lh-100">
@@ -166,7 +167,7 @@
   }
 </script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
-    async defer></script>
+    async
+    defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"></script>
 </body>
 </html>

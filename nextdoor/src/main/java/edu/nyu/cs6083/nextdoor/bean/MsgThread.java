@@ -14,26 +14,24 @@ import lombok.Setter;
 @Table(name = "thread")
 public class MsgThread {
 
-    public MsgThread() {
-
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tid")
     @Getter
     @Setter
     private Integer tid;
-
     @Column(name = "subject")
     @Getter
     @Setter
     private String subject;
-
     @Column(name = "type")
     @Getter
     @Setter
     private Integer type;
+
+    public MsgThread() {
+
+    }
 
     @Override
     public String toString() {

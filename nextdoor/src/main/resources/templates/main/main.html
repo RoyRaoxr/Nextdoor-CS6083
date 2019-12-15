@@ -3,34 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Nextdoor - CS6083</title>
-  <link rel="stylesheet"
+  <link crossorigin="anonymous"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-        crossorigin="anonymous">
-  <link rel="stylesheet" media="all" th:href="@{/css/offcanvas.css}">
-  <script th:src="@{/js/offcanvas.js}"></script>
+        rel="stylesheet">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+  <script crossorigin="anonymous"
           integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-          crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+          src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script crossorigin="anonymous"
           integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-          crossorigin="anonymous"></script>
+          src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <link media="all" rel="stylesheet" th:href="@{/css/offcanvas.css}">
+  <script th:src="@{/js/offcanvas.js}"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
   <a class="navbar-brand ml-5 mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
-  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+  <button class="navbar-toggler p-0 border-0" data-toggle="offcanvas" type="button">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse">
-    <form class="form-inline w-100 ml-3 my-2 my-lg-0">
-      <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread"
-             aria-label="Search">
-      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search"
-              type="submit">Search
+    <form class="form-inline w-100 ml-3 my-2 my-lg-0" th:action="@{/search}" th:method="post">
+      <input aria-label="Search" class="form-control w-75 mr-sm-2" placeholder="Search thread"
+             th:name="keyword"
+             th:type="text">
+
+      <button class="btn btn-outline-light my-2 my-sm-0" th:type="submit">Search
       </button>
     </form>
   </div>
@@ -56,11 +58,11 @@
         <a class="nav-link" th:href="@{/block}">Blocks</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+           data-toggle="dropdown" href="#" id="navbarDropdownMenuLink">
           Profile & Settings
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <div aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu">
           <a class="dropdown-item" th:href="@{/profile}">Profile</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" th:href="@{/logout}">Sign Out</a>
@@ -70,7 +72,7 @@
   </div>
 </nav>
 
-<main role="main" class="container">
+<main class="container" role="main">
 
   <div
       class="d-flex p-3 my-3 align-items-center text-white-50 bg-purple rounded shadow-sm col-md-12">
@@ -84,20 +86,20 @@
 
   <div class="row">
     <div class="my-3 p-3 bg-white rounded shadow-sm col-md-7">
-      <form th:action="@{/sendmessage}" method="post">
+      <form method="post" th:action="@{/sendmessage}">
         <h6 class="border-bottom border-gray pb-2 mb-0">Compose message</h6>
         <div class="form-group">
           <div class="form-group col-md">
             <label for="inputTitle">Title:</label>
-            <input type="text" class="form-control" id="inputTitle" name="title">
+            <input class="form-control" id="inputTitle" name="title" type="text">
           </div>
           <div class="form-row col-md">
             <label for="inputText">Content:</label>
-            <textarea class="form-control" rows="5" id="inputText" name="content"></textarea>
+            <textarea class="form-control" id="inputText" name="content" rows="5"></textarea>
           </div>
           <div class="form-check ">
-            <input class="form-check-input" type="radio" th:name="select" id="exampleRadios1"
-                   th:value="toneighbor" checked>
+            <input checked class="form-check-input" id="exampleRadios1" th:name="select"
+                   th:value="toneighbor" type="radio">
             <label class="form-check-label" for="exampleRadios1">
               To a Neighbor
             </label>
@@ -109,8 +111,8 @@
             </select>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="select" id="exampleRadios2"
-                   th:value="tofriend">
+            <input class="form-check-input" id="exampleRadios2" name="select" th:value="tofriend"
+                   type="radio">
             <label class="form-check-label" for="exampleRadios2">
               To a Friend
             </label>
@@ -121,34 +123,34 @@
             </select>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" th:name="select" id="exampleRadios3"
-                   th:value="allhood">
+            <input class="form-check-input" id="exampleRadios3" th:name="select" th:value="allhood"
+                   type="radio">
             <label class="form-check-label" for="exampleRadios3">
               Your Neighborhood
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" th:name="select" id="exampleRadios4"
-                   th:value="allblock">
+            <input class="form-check-input" id="exampleRadios4" th:name="select" th:value="allblock"
+                   type="radio">
             <label class="form-check-label" for="exampleRadios4">
               Your Block
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" th:name="select" id="exampleRadios4"
-                   th:value="allfriend">
+            <input class="form-check-input" id="exampleRadios4" th:name="select" th:value="allfriend"
+                   type="radio">
             <label class="form-check-label" for="exampleRadios4">
               All YOUR Friends
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="mapCheck">
+            <input class="form-check-input" id="mapCheck" type="checkbox" value="">
             <label class="form-check-label" for="mapCheck">
               Add a location
             </label>
           </div>
         </div>
-        <button type="submit" class="mr-5 btn btn-primary">Post</button>
+        <button class="mr-5 btn btn-primary" type="submit">Post</button>
       </form>
     </div>
 
@@ -247,8 +249,8 @@
 
 </script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"
-    async defer></script>
+    async
+    defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback=initMap"></script>
 </body>
 </html>
 

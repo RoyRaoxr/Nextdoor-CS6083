@@ -32,24 +32,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class MapController {
 
-    private HttpClient client = HttpClient.newHttpClient();
     private static String API = "https://maps.googleapis.com/maps/api/geocode/json?"
         + "address=%s,+%s,+%s&key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback";
-
     @Autowired
     BlockDao blockDao;
-
     @Autowired
     NeighborhoodDao neighborhoodDao;
-
     @Autowired
     JdbcTemplate jdbcTemplate;
-
     @Autowired
     MessageDao messageDao;
-
     @Autowired
     UserDao userDao;
+    private HttpClient client = HttpClient.newHttpClient();
 
     @GetMapping("map")
     public String map(HttpServletRequest request, Model m) {
@@ -140,7 +135,6 @@ public class MapController {
             mids.add(rs.getInt("mid"));
         });
 
-        System.out.println(mids);
         List<Message> ret = messageDao.findAllById(mids);
 
         return ret;

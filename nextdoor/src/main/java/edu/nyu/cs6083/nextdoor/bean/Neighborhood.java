@@ -14,40 +14,35 @@ import lombok.Setter;
 @Table(name = "neighborhood")
 public class Neighborhood {
 
-    public Neighborhood() {
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
     @Column(name = "nid")
     private Integer nid;
-
     @Getter
     @Setter
     @Column(name = "nname")
     private String nname;
-
     @Getter
     @Setter
     @Column(name = "sw_lng")
     private Float sw_lng;
-
     @Getter
     @Setter
     @Column(name = "sw_lat")
     private Float sw_lat;
-
     @Getter
     @Setter
     @Column(name = "ne_lng")
     private Float ne_lng;
-
     @Getter
     @Setter
     @Column(name = "ne_lat")
     private Float ne_lat;
+
+    public Neighborhood() {
+    }
 
     @Override
     public String toString() {

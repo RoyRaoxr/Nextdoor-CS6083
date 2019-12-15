@@ -2,26 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Nextdoor - CS6083</title>
-  <link rel="stylesheet"
+  <title>Nextdoor - Profile</title>
+  <link crossorigin="anonymous"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-        crossorigin="anonymous">
-  <link rel="stylesheet" media="all" th:href="@{/css/offcanvas.css}">
+        rel="stylesheet">
+  <link media="all" rel="stylesheet" th:href="@{/css/offcanvas.css}">
   <script th:src="@{/js/offcanvas.js}"></script>
-  <link rel="stylesheet" media="all" th:href="@{/css/form-validation.css}">
+  <link media="all" rel="stylesheet" th:href="@{/css/form-validation.css}">
   <script th:src="@{/js/form-validation.js}"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
   <a class="navbar-brand ml-5 mr-auto mr-lg-0" th:href="@{/main}">Nextdoor</a>
-  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+  <button class="navbar-toggler p-0 border-0" data-toggle="offcanvas" type="button">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse">
-    <form class="form-inline w-100 ml-3 my-2 my-lg-0">
-      <input class="form-control w-75 mr-sm-2" type="text" placeholder="Search thread" aria-label="Search">
-      <button class="btn btn-outline-light my-2 my-sm-0" data-toggle="collapse" data-target="Search" type="submit">Search</button>
+    <form class="form-inline w-100 ml-3 my-2 my-lg-0" th:action="@{/search}" th:method="post">
+      <input aria-label="Search" class="form-control w-75 mr-sm-2" placeholder="Search thread"
+             th:name="keyword"
+             th:type="text">
+
+      <button class="btn btn-outline-light my-2 my-sm-0" th:type="submit">Search
+      </button>
     </form>
   </div>
 
@@ -46,11 +50,11 @@
         <a class="nav-link" th:href="@{/block}">Blocks</a>
       </li>
       <li class="nav-item active dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+           data-toggle="dropdown" href="#" id="navbarDropdownMenuLink">
           Profile & Settings
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <div aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu">
           <a class="dropdown-item" th:href="@{/profile}">Profile</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" th:href="@{/logout}">Sign Out</a>
@@ -77,28 +81,30 @@
 <!--  </nav>-->
 <!--</div>-->
 
-<main role="main" class="container">
+<main class="container" role="main">
   <div class="d-flex align-items-center p-3 my-3 ">
   </div>
   <div class="container">
     <div>
       <div class="col-md-16 order-md-1">
         <h4 class="mb-3">Your profile</h4>
-        <form class="needs-validation" novalidate th:action="@{/updateprofile}" th:object="${user}"
-              method="POST">
+        <form class="needs-validation" method="POST" novalidate th:action="@{/updateprofile}"
+              th:object="${user}">
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="firstName">First name</label>
-              <input type="text" th:readonly="readonly" th:field="*{firstname}" class="form-control" id="firstName"
-                     placeholder="" value="" required>
+              <input class="form-control" id="firstName" placeholder="" required
+                     th:field="*{firstname}"
+                     th:readonly="readonly" type="text" value="">
               <div class="invalid-feedback">
                 Valid first name is required.
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="lastName">Last name</label>
-              <input type="text" th:readonly="readonly" th:field="*{lastname}" class="form-control" id="lastName"
-                     placeholder="" value="" required>
+              <input class="form-control" id="lastName" placeholder="" required
+                     th:field="*{lastname}"
+                     th:readonly="readonly" type="text" value="">
               <div class="invalid-feedback">
                 Valid last name is required.
               </div>
@@ -108,8 +114,9 @@
           <div class="mb-3">
             <label for="username">Username</label>
             <div class="input-group">
-              <input type="text" th:readonly="readonly" th:field="*{username}" class="form-control" id="username"
-                     placeholder="Only letters and numbers" required>
+              <input class="form-control" id="username" placeholder="Only letters and numbers" required
+                     th:field="*{username}"
+                     th:readonly="readonly" type="text">
               <div class="invalid-feedback" style="width: 100%;">
                 Your username is required.
               </div>
@@ -118,8 +125,8 @@
 
           <div class="mb-3">
             <label for="email">Password</label>
-            <input type="password" th:field="*{password}" class="form-control" id="password"
-                   placeholder="Password">
+            <input class="form-control" id="password" placeholder="Password" th:field="*{password}"
+                   type="password">
             <div class="invalid-feedback">
               Please enter a valid passwrod.
             </div>
@@ -127,8 +134,8 @@
 
           <div class="mb-3">
             <label for="address">The street you live</label>
-            <input type="text" th:field="*{ustreet}" class="form-control" id="ustreet"
-                   placeholder="1234 Main St" required>
+            <input class="form-control" id="ustreet" placeholder="1234 Main St" required
+                   th:field="*{ustreet}" type="text">
             <div class="invalid-feedback">
               Please enter your street.
             </div>
@@ -137,31 +144,32 @@
           <div class="mb-3">
             <label for="address2">A brief self introduction<span
                 class="text-muted">(Optional)</span></label>
-            <input type="text" th:field="*{profile}" class="form-control" id="profile"
-                   placeholder="">
+            <input class="form-control" id="profile" placeholder="" th:field="*{profile}"
+                   type="text">
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="country">City</label>
-              <input type="text" th:field="*{ucity}" class="form-control" id="city"
-                     placeholder="New york" required>
+              <input class="form-control" id="city" placeholder="New york" required
+                     th:field="*{ucity}" type="text">
               <div class="invalid-feedback">
                 Please select a valid city.
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="state">State</label>
-              <input type="text" th:field="*{ustate}" class="form-control" id="state"
-                     placeholder="NY"
-                     required>
+              <input class="form-control" id="state" placeholder="NY" required
+                     th:field="*{ustate}"
+                     type="text">
               <div class="invalid-feedback">
                 Please provide a valid state.
               </div>
             </div>
             <div class="col-md-12 mb-3">
-              <label for="zip">How you want to be notified, it should be valid email or phone</label>
-              <input type="text" th:field="*{notify}" class="form-control" id="zip" placeholder="">
+              <label for="zip">How you want to be notified, it should be valid email or
+                phone</label>
+              <input class="form-control" id="zip" placeholder="" th:field="*{notify}" type="text">
               <div class="invalid-feedback">
                 notification required.
               </div>
@@ -175,8 +183,14 @@
     </div>
   </div>
 </main>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 </body>
 </html>

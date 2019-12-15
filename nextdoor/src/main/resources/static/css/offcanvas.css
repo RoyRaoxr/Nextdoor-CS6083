@@ -5,7 +5,7 @@ body {
 
 body {
   padding-top: 56px;
-  background: ghostwhite!important;
+  background: ghostwhite !important;
 }
 
 @media (max-width: 991.98px) {
@@ -24,6 +24,7 @@ body {
     transition: transform .3s ease-in-out, visibility .3s ease-in-out;
     transition: transform .3s ease-in-out, visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
   }
+
   .offcanvas-collapse.open {
     visibility: visible;
     -webkit-transform: translateX(-100%);
@@ -68,10 +69,26 @@ body {
   color: #343a40;
 }
 
-.text-white-50 { color: rgba(255, 255, 255, .5); }
+.text-white-50 {
+  color: rgba(255, 255, 255, .5);
+}
 
-.bg-purple { background-color: #6f42c1; }
-.bg-blue {background-color: dodgerblue}
-.lh-100 { line-height: 1; }
-.lh-125 { line-height: 1.25; }
-.lh-150 { line-height: 1.5; }
+.bg-purple {
+  background-color: #6f42c1;
+}
+
+.bg-blue {
+  background-color: dodgerblue
+}
+
+.lh-100 {
+  line-height: 1;
+}
+
+.lh-125 {
+  line-height: 1.25;
+}
+
+.lh-150 {
+  line-height: 1.5;
+}

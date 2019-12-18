@@ -54,10 +54,11 @@ public class MainController {
         User user = (User) request.getSession().getAttribute("useradmin");
 
         // initial message mid
-        String sql = "Select min(mid) as mid from message Where tid in \n"
+        String sql = "Select min(mid) as mid, tid from message Where tid in \n"
             + "(Select tid From message Where message.timestamp > \n"
             + "(Select lastlogouttime From user Where uid = ?) \n"
-            + "and tid in (Select tid From threadparticipant natural join thread Where recid = ? and type = ?))";
+            + "and tid in (Select tid From threadparticipant natural join thread Where recid = ? and type = ?)) \n" +
+                "group by tid";
 
         //type 3 block
         List<Integer> type3 = new ArrayList<>();

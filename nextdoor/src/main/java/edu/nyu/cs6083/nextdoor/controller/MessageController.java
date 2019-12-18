@@ -190,6 +190,7 @@ public class MessageController {
                 for (int id : fids) {
                     jdbcTemplate.update(s3, tid, id);
                 }
+                jdbcTemplate.update(s3, tid, user.getUid());
                 break;
         }
 
@@ -216,9 +217,11 @@ public class MessageController {
         if (type == 1) {
             recvid = Integer.valueOf(data.get("tofriend"));
             jdbcTemplate.update(s3, tid, recvid);
+            jdbcTemplate.update(s3, tid, user.getUid());
         } else if (type == 0) {
             recvid = Integer.valueOf(data.get("toneighbor"));
             jdbcTemplate.update(s3, tid, recvid);
+            jdbcTemplate.update(s3, tid, user.getUid());
         } else if (type == 2) {
             String s5 = "select uid from joinblock natural join block "
                 + "where nid = (select nid from joinblock natural join block where uid = ?)";

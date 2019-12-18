@@ -118,7 +118,18 @@ public class BlockController {
             "INSERT INTO `nextdoor`.`application`(`aid`, `uid`, `bid`, `timestamp`, `status`) "
                 + "VALUES (?, ?, ?, now(), 0)";
         jdbcTemplate.update(sql, prevAid + 1, user.getUid(), bid);
+        String p2 = "call can_join(?,?)";
 
+        List<SqlParameter> ps = Arrays.asList(
+            new SqlParameter(Types.INTEGER), new SqlParameter(Types.INTEGER),
+            new SqlParameter(Types.INTEGER), new SqlParameter(Types.INTEGER));
+
+        jdbcTemplate.call(con -> {
+            CallableStatement cs = con.prepareCall(p2);
+            cs.setInt(1, user.getUid());
+            cs.setInt(2, bid);
+            return cs;
+        }, ps);
         return "redirect:block";
     }
 
@@ -138,4 +149,5 @@ public class BlockController {
 
         return "redirect:block";
     }
+
 }

@@ -107,7 +107,7 @@
             <strong class="text-gray-dark"
                     th:text="${u.getUser().getFirstname()} +' '+${u.getUser().getLastname()}"></strong>
             <a th:href="@{/voteapp(id=${u.getUser().getUid()}, s=1, bid = ${block.getBid()}, aid=${u.getAid()})}">Accept</a>
-            <a th:href="@{/acceptfriend(id=${u.getUser().getUid()}, s=0)}">Deny</a>
+            <a th:href="@{/voteapp(id=${u.getUser().getUid()}, s=0, bid = ${block.getBid()}, aid=${u.getAid()})}">Deny</a>
           </div>
 
           <span class="d-block"></span>

@@ -89,23 +89,23 @@
     </div>
   </div>
 
-  <!--  <div class="my-3 p-3 bg-white rounded shadow-sm" th:each="m : ${all}">-->
-  <!--    <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${m.getTitle()}">other Title </h6>-->
-  <!--    <div class="media text-muted pt-3">-->
-  <!--      <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">-->
-  <!--        <strong class="d-block text-gray-dark" id="mid" th:value="${m.getMid()}"-->
-  <!--                th:text="${m.getAuthor().getFirstname()}+': @'+${m.getReplyid().getAuthor().getFirstname()}+' '+${m.getText()}">-->
-  <!--          Tracy:@author Messge Text-->
-  <!--        </strong>-->
-  <!--      </p>-->
-  <!--    </div>-->
-  <!--    <div class="col-ml">-->
-  <!--      <button type="button" class="my-2 btn-sm btn btn-primary" data-toggle="modal"-->
-  <!--              data-target="#exampleModal" .bd-example-modal-lg>-->
-  <!--        Reply-->
-  <!--      </button>-->
-  <!--    </div>-->
-  <!--  </div>-->
+    <div class="my-3 p-3 bg-white rounded shadow-sm" th:each="m : ${all}">
+      <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${m.getTitle()}">other Title </h6>
+      <div class="media text-muted pt-3">
+        <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+          <strong class="d-block text-gray-dark" id="mid" th:value="${m.getMid()}"
+                  th:text="${m.getAuthor().getFirstname()}+': @'+${m.getReplyid().getAuthor().getFirstname()}+' '+${m.getText()}">
+            Tracy:@author Messge Text
+          </strong>
+        </p>
+      </div>
+      <div class="col-ml">
+        <button .bd-example-modal-lg class="btn btn-sm my-2 btn-primary" data-target="#exampleModal"
+                data-toggle="modal" type="button">
+          Reply
+        </button>
+      </div>
+    </div>
 
   <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade bd-example-modal-lg" id="exampleModal"
        role="dialog" tabindex="-1">
@@ -189,7 +189,7 @@
       var content = $('#inputText').val();
       var replymid = /*[[${msg.getMid()}]]*/ '';
       var tid = /*[[${msg.getMsgThread().getTid()}]]*/'';
-      var author = /*[[${msg.getAuthor().getUid()}]]*/'';
+      var author = /*[[${session.useradmin.getUid()}]]*/'';
 
       if ($('#mapCheck').is(':checked')) {
         $.post(
@@ -204,7 +204,7 @@
               "author": author
             },
             function (data) {
-              window.location.href = "http://localhost:9999/nextdoor/message";
+              window.location.href = "http://localhost:9999/nextdoor/reply" + "?id=" + replymid;
             }
         );
       } else {
@@ -218,7 +218,7 @@
               "author": author
             },
             function (data) {
-              window.location.href = "http://localhost:9999/nextdoor/message";
+              window.location.href = "http://localhost:9999/nextdoor/reply" + "?id=" + replymid;
             }
         );
       }

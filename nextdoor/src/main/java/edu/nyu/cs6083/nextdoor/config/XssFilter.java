@@ -38,5 +38,17 @@ public class XssFilter implements Filter {
     }
 
 
+    @Bean
+    @Primary
+    public ObjectMapper xssObjectMapper(Jackson2ObjectMapperBuilder builder) {
+
+        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+
+        SimpleModule xssModule = new SimpleModule("XssStringJsonSerializer");
+        xssModule.addSerializer(new XssStringJsonSerializer());
+        objectMapper.registerModule(xssModule);
+
+        return objectMapper;
+    }
 }
 

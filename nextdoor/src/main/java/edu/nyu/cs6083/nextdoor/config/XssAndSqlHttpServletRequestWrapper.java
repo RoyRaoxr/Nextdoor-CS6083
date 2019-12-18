@@ -6,14 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 public class XssAndSqlHttpServletRequestWrapper extends HttpServletRequestWrapper {
-
     private HttpServletRequest request;
-
     public XssAndSqlHttpServletRequestWrapper(HttpServletRequest request) {
         super(request);
         this.request = request;
     }
-
     @Override
     public String getParameter(String name) {
         String value = request.getParameter(name);
@@ -22,7 +19,6 @@ public class XssAndSqlHttpServletRequestWrapper extends HttpServletRequestWrappe
         }
         return value;
     }
-
     @Override
     public String[] getParameterValues(String name) {
         String[] parameterValues = super.getParameterValues(name);

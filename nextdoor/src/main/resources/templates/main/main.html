@@ -98,12 +98,12 @@
             <textarea class="form-control" id="inputText" name="content" rows="5"></textarea>
           </div>
           <div class="form-check ">
-            <input checked class="form-check-input" id="exampleRadios1" th:name="select"
+            <input checked class="form-check-input" id="toneighbor" th:name="select"
                    th:value="toneighbor" type="radio">
             <label class="form-check-label" for="exampleRadios1">
               To a Neighbor
             </label>
-            <select class="w-75 browser-default custom-select-sm" name="toneighbor">
+            <select class="w-75 browser-default custom-select-sm" name="toneighbor" id="selecttoneighbor">
               <option th:each="n:${neighbors}"
                       th:text="${n.getFirstname()} +' '+${n.getLastname()}"
                       th:value="${n.getUid()}"
@@ -111,33 +111,33 @@
             </select>
           </div>
           <div class="form-check">
-            <input class="form-check-input" id="exampleRadios2" name="select" th:value="tofriend"
+            <input class="form-check-input" id="tofriend" name="select" th:value="tofriend"
                    type="radio">
             <label class="form-check-label" for="exampleRadios2">
               To a Friend
             </label>
-            <select class="w-75 browser-default custom-select-sm" id="select" th:name="tofriend">
+            <select class="w-75 browser-default custom-select-sm" id="selecttofriend" th:name="tofriend">
               <option th:each="n:${friends}"
                       th:text="${n.getFirstname()} +' '+${n.getLastname()}"
                       th:value="${n.getUid()}"></option>
             </select>
           </div>
           <div class="form-check">
-            <input class="form-check-input" id="exampleRadios3" th:name="select" th:value="allhood"
+            <input class="form-check-input" id="allhood" th:name="select" th:value="allhood"
                    type="radio">
             <label class="form-check-label" for="exampleRadios3">
               Your Neighborhood
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" id="exampleRadios4" th:name="select" th:value="allblock"
+            <input class="form-check-input"  th:name="select" id="allblock" th:value="allblock"
                    type="radio">
             <label class="form-check-label" for="exampleRadios4">
               Your Block
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" id="exampleRadios4" th:name="select" th:value="allfriend"
+            <input class="form-check-input" th:name="select" id="allfriend" th:value="allfriend"
                    type="radio">
             <label class="form-check-label" for="exampleRadios4">
               All YOUR Friends
@@ -150,7 +150,7 @@
             </label>
           </div>
         </div>
-        <button class="mr-5 btn btn-primary" type="submit">Post</button>
+        <button class="mr-5 btn btn-primary" type="button" onclick="reply()">Post</button>
       </form>
     </div>
 
@@ -211,8 +211,12 @@
 <script th:inline="javascript">
 
   var map;
+  var lat;
+  var lng;
 
   function initMap() {
+
+
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 40.730610, lng: -73.935242},
@@ -220,12 +224,12 @@
     });
 
     var message = /*[[${session.useradmin.getUid()}]]*/ 'default';
-    var recs = [];
+
 
     var marker = null;
     google.maps.event.addListener(map, 'click', function (event) {
-      var lat = event.latLng.lat();
-      var lng = event.latLng.lng();
+      lat = event.latLng.lat();
+      lng = event.latLng.lng();
 
       // remove previous Marker
       if (marker != null) {
@@ -239,10 +243,77 @@
       // attach Marker instance to Map instance
       marker.setMap(map);
 
-      // if you also want to change the value of FORM, you can add a hidden input in form, and change value using javascript doom:
-      console.log(lat);
-      console.log(lng);
     });
+
+
+    reply = function () {
+      var title = $('#inputTitle').val();
+      var content = $('#inputText').val();
+      var select;
+      var toneighbor;
+      var allblock;
+      var allfriend;
+      var allhood;
+      var tofriend;
+
+      if ($('#toneighbor').is(':checked')) {
+        select = 'toneighbor';
+        toneighbor = $('#selecttoneighbor option:selected').val();
+      }
+      if ($('#tofriend').is(':checked')) {
+        select = 'tofriend';
+        tofriend = $('#selecttofriend option:selected').val();
+      }
+      if ($('#allhood').is(':checked')) {
+        select = 'allhood';
+      }
+      if ($('#allblock').is(':checked')) {
+        select = 'allblock';
+      }
+      if ($('#allfriend').is(':checked')) {
+        select = 'allfriend';
+      }
+
+
+      if ($('#mapCheck').is(':checked')) {
+        $.post(
+            "http://localhost:9999/nextdoor/sendmessage",
+            {
+              "title": title,
+              "content": content,
+              "lat": lat,
+              "lng": lng,
+              "select": select,
+              "allblock": allblock,
+              "allfriend": allfriend,
+              "allhood":allhood,
+              "tofriend":tofriend,
+              "toneighbor":toneighbor,
+              "ttt":$('#ttt').val()
+            },
+            function (data) {
+              window.location.href = "http://localhost:9999/nextdoor/main";
+            }
+        );
+      } else {
+        $.post(
+            "http://localhost:9999/nextdoor/sendmessage",
+            {
+              "title": title,
+              "content": content,
+              "select": select,
+              "allblock": allblock,
+              "allfriend": allfriend,
+              "allhood":allhood,
+              "tofriend":tofriend,
+              "toneighbor":toneighbor
+            },
+            function (data) {
+              window.location.href = "http://localhost:9999/nextdoor/main";
+            }
+        );
+      }
+    }
 
   }
 

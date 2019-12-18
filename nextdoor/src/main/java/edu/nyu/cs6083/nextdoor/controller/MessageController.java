@@ -186,7 +186,7 @@ public class MessageController {
                         Integer.class);
 
                 jdbcTemplate
-                    .update(s2, tid, user.getUid(), data.get("title"), data.get("content"), 0, 0);
+                    .update(s2, tid, user.getUid(), data.get("title"), data.get("content"), data.get("lat"), data.get("lng"));
                 for (int id : fids) {
                     jdbcTemplate.update(s3, tid, id);
                 }
@@ -211,7 +211,7 @@ public class MessageController {
             .queryForObject("select tid from thread where tid = (select max(tid) from thread)",
                 Integer.class);
 
-        jdbcTemplate.update(s2, tid, user.getUid(), data.get("title"), data.get("content"), 0, 0);
+        jdbcTemplate.update(s2, tid, user.getUid(), data.get("title"), data.get("content"), data.get("lat"), data.get("lng"));
 
         if (type == 1) {
             recvid = Integer.valueOf(data.get("tofriend"));

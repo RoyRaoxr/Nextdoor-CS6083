@@ -3,11 +3,15 @@ package edu.nyu.cs6083.nextdoor.controller;
 
 import edu.nyu.cs6083.nextdoor.bean.User;
 import edu.nyu.cs6083.nextdoor.dao.UserDao;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class UserAuthController {
 
-    private final Logger logger = LoggerFactory.getLogger(UserAuthController.class.getSimpleName());
-
+    private static String API = "https://maps.googleapis.com/maps/api/geocode/json?"
+        + "address=%s,+%s,+%s&key=AIzaSyCRaTJcMX8c_Y0T-lOwpX9bWhQeWh8yAXE&callback";
     @Autowired
     UserDao userDao;
 
@@ -60,7 +64,7 @@ public class UserAuthController {
     }
 
     @PostMapping("/signup")
-    public String userSignup(@ModelAttribute User user, Model m) {
+    public String userSignup(@ModelAttribute User user, Model m) throws Exception {
         boolean exists = userDao.findByUsername(user.getUsername()) != null;
         if (exists) {
             m.addAttribute("userExists", true);
@@ -68,6 +72,24 @@ public class UserAuthController {
         }
         String md5Password = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
         user.setPassword(md5Password);
+
+        HttpClient client = HttpClient.newHttpClient();
+        String fetch = String.format(API, user.getUstreet().replaceAll(" ", "+"),
+            user.getUcity().replaceAll(" ", "+"), user.getUstate());
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(fetch)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        JSONObject jsonObject = new JSONObject(response.body());
+        JSONArray arr = jsonObject.getJSONArray("results");
+
+        Double lat = arr.getJSONObject(0).getJSONObject("geometry").getJSONObject("location")
+            .getDouble("lat");
+        Double lng = arr.getJSONObject(0).getJSONObject("geometry").getJSONObject("location")
+            .getDouble("lng");
+
+        user.setLat(lat);
+        user.setLng(lng);
+
         userDao.save(user);
         return "redirect:/";
     }

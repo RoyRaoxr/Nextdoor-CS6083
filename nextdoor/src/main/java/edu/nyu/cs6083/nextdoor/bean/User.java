@@ -65,6 +65,14 @@ public class User {
     @Setter
     @Column(name = "lastlogouttime")
     private Timestamp lastlogouttime;
+    @Column(name = "lat")
+    @Getter
+    @Setter
+    private Double lat;
+    @Column(name = "lng")
+    @Getter
+    @Setter
+    private Double lng;
 
     public User() {
     }
@@ -83,7 +91,9 @@ public class User {
             ", profile='" + profile + '\'' +
             ", photo='" + photo + '\'' +
             ", notify='" + notify + '\'' +
-            ", lastlogouttime=" + lastlogouttime + '\'' +
+            ", lastlogouttime=" + lastlogouttime +
+            ", lat=" + lat +
+            ", lng=" + lng +
             '}';
     }
 }

@@ -85,7 +85,7 @@ public class MessageController {
 
         //initial message mid
         String sql = "Select mid as mid from message Where tid in \n"
-            + "(Select tid From threadparticipant natural join thread Where recid = ? and type = ?)";
+            + "(Select tid From threadparticipant natural join thread Where recid = ? and type = ?) and timestamp <= ?";
 
         //type 3 block
         List<Integer> type3 = new ArrayList<>();
@@ -93,6 +93,7 @@ public class MessageController {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, user.getUid());
             ps.setInt(2, 3);
+            ps.setTimestamp(3, user.getLastlogouttime());
             return ps;
         }, rs -> {
             type3.add(rs.getInt("mid"));
@@ -105,6 +106,7 @@ public class MessageController {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, user.getUid());
             ps.setInt(2, 2);
+            ps.setTimestamp(3, user.getLastlogouttime());
             return ps;
         }, rs -> {
             type2.add(rs.getInt("mid"));
@@ -118,6 +120,7 @@ public class MessageController {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, user.getUid());
             ps.setInt(2, 1);
+            ps.setTimestamp(3, user.getLastlogouttime());
             return ps;
         }, rs -> {
             type1.add(rs.getInt("mid"));
@@ -130,6 +133,7 @@ public class MessageController {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, user.getUid());
             ps.setInt(2, 0);
+            ps.setTimestamp(3, user.getLastlogouttime());
             return ps;
         }, rs -> {
             type0.add(rs.getInt("mid"));

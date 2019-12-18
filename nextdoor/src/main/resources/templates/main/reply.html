@@ -76,7 +76,7 @@
       Title </h5>
     <div class="media text-muted pt-4">
       <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-        <strong class="d-block text-gray-dark" th:text="${msg.getText()}">
+        <strong class="d-block text-gray-dark" th:text="${msg.getAuthor().getFirstname()} +' '+ ${msg.getAuthor().getLastname()} + ': ' + ${msg.getText()}">
           Initial Messge Text
         </strong>
       </p>

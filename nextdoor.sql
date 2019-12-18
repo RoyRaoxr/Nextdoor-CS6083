@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 15/12/2019 16:36:33
+ Date: 17/12/2019 22:08:36
 */
 
 SET NAMES utf8mb4;
@@ -40,6 +40,13 @@ CREATE TABLE `application` (
 BEGIN;
 INSERT INTO `application` VALUES (1, 7, 1, '2019-12-15 13:45:15', 0);
 INSERT INTO `application` VALUES (2, 3, 1, '2019-12-15 13:55:37', 1);
+INSERT INTO `application` VALUES (3, 10, 1, '2019-12-17 21:15:22', 1);
+INSERT INTO `application` VALUES (4, 7, 3, '2019-12-17 21:16:56', 0);
+INSERT INTO `application` VALUES (5, 10, 5, '2019-12-17 21:57:55', 1);
+INSERT INTO `application` VALUES (6, 10, 4, '2019-12-17 21:59:40', 1);
+INSERT INTO `application` VALUES (7, 3, 4, '2019-12-17 22:00:06', 1);
+INSERT INTO `application` VALUES (8, 10, 4, '2019-12-17 22:00:38', 2);
+INSERT INTO `application` VALUES (9, 10, 4, '2019-12-17 22:05:40', 2);
 COMMIT;
 
 -- ----------------------------
@@ -57,7 +64,7 @@ CREATE TABLE `applicationvote` (
   KEY `applicationvote_ibfk_2` (`voteid`),
   CONSTRAINT `applicationvote_ibfk_1` FOREIGN KEY (`aid`) REFERENCES `application` (`aid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `applicationvote_ibfk_2` FOREIGN KEY (`voteid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of applicationvote
@@ -65,6 +72,12 @@ CREATE TABLE `applicationvote` (
 BEGIN;
 INSERT INTO `applicationvote` VALUES (17, 2, 1, '2019-12-15 13:57:04', 1);
 INSERT INTO `applicationvote` VALUES (18, 2, 2, '2019-12-15 13:57:35', 1);
+INSERT INTO `applicationvote` VALUES (19, 3, 1, '2019-12-17 21:15:33', 1);
+INSERT INTO `applicationvote` VALUES (20, 3, 2, '2019-12-17 21:15:50', 1);
+INSERT INTO `applicationvote` VALUES (21, 3, 7, '2019-12-17 21:16:12', 1);
+INSERT INTO `applicationvote` VALUES (22, 7, 10, '2019-12-17 22:00:21', 1);
+INSERT INTO `applicationvote` VALUES (23, 8, 3, '2019-12-17 22:04:59', 0);
+INSERT INTO `applicationvote` VALUES (24, 9, 3, '2019-12-17 22:06:03', 0);
 COMMIT;
 
 -- ----------------------------
@@ -119,8 +132,8 @@ CREATE TABLE `friends` (
 -- Records of friends
 -- ----------------------------
 BEGIN;
-INSERT INTO `friends` VALUES (1, 2, 1, 1);
 INSERT INTO `friends` VALUES (1, 7, 1, 1);
+INSERT INTO `friends` VALUES (7, 2, 1, 1);
 COMMIT;
 
 -- ----------------------------
@@ -143,7 +156,7 @@ CREATE TABLE `joinblock` (
 BEGIN;
 INSERT INTO `joinblock` VALUES (1, 1, '2019-12-03 17:18:54');
 INSERT INTO `joinblock` VALUES (2, 1, '2019-12-05 17:19:10');
-INSERT INTO `joinblock` VALUES (7, 1, '2019-12-15 14:19:56');
+INSERT INTO `joinblock` VALUES (3, 4, '2019-12-17 22:00:21');
 COMMIT;
 
 -- ----------------------------
@@ -167,7 +180,7 @@ CREATE TABLE `message` (
   CONSTRAINT `message_ibfk_1` FOREIGN KEY (`tid`) REFERENCES `thread` (`tid`),
   CONSTRAINT `message_ibfk_2` FOREIGN KEY (`author`) REFERENCES `user` (`uid`),
   CONSTRAINT `message_ibfk_3` FOREIGN KEY (`replyid`) REFERENCES `message` (`mid`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of message
@@ -208,6 +221,8 @@ INSERT INTO `message` VALUES (33, 14, 1, '郭德纲', '2019-12-14 19:27:56', ' s
 INSERT INTO `message` VALUES (34, 15, 1, '于谦', '2019-12-14 19:29:43', '123123123', 0.00000000, 0.00000000, NULL);
 INSERT INTO `message` VALUES (35, 16, 1, '岳云鹏', '2019-12-14 19:30:54', '123123123', 0.00000000, 0.00000000, NULL);
 INSERT INTO `message` VALUES (36, 17, 1, '牛批', '2019-12-14 19:44:57', ' adasdasd', 0.00000000, 0.00000000, NULL);
+INSERT INTO `message` VALUES (37, 18, 1, 'Hello world', '2019-12-17 21:02:49', 'dsrdkjtdjksrhlksdfhgsdfglkjsdfkghsdfg', 0.00000000, 0.00000000, NULL);
+INSERT INTO `message` VALUES (38, 19, 1, 'neighbor', '2019-12-17 21:03:17', 'asdasdasdasdasdasdasd', 0.00000000, 0.00000000, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -294,7 +309,7 @@ CREATE TABLE `thread` (
   PRIMARY KEY (`tid`),
   UNIQUE KEY `tid` (`tid`),
   KEY `tid_2` (`tid`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of thread
@@ -314,6 +329,8 @@ INSERT INTO `thread` VALUES (14, '郭德纲', 3);
 INSERT INTO `thread` VALUES (15, '于谦', 2);
 INSERT INTO `thread` VALUES (16, '岳云鹏', 1);
 INSERT INTO `thread` VALUES (17, '牛批', 1);
+INSERT INTO `thread` VALUES (18, 'Hello world', 2);
+INSERT INTO `thread` VALUES (19, 'neighbor', 0);
 COMMIT;
 
 -- ----------------------------
@@ -338,6 +355,8 @@ INSERT INTO `threadblock` VALUES (7, 1);
 INSERT INTO `threadblock` VALUES (14, 1);
 INSERT INTO `threadblock` VALUES (15, 1);
 INSERT INTO `threadblock` VALUES (15, 2);
+INSERT INTO `threadblock` VALUES (18, 1);
+INSERT INTO `threadblock` VALUES (18, 2);
 COMMIT;
 
 -- ----------------------------
@@ -359,13 +378,12 @@ CREATE TABLE `threadparticipant` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `threadparticipant` VALUES (3, 1);
-INSERT INTO `threadparticipant` VALUES (4, 1);
-INSERT INTO `threadparticipant` VALUES (4, 2);
 INSERT INTO `threadparticipant` VALUES (5, 1);
 INSERT INTO `threadparticipant` VALUES (7, 3);
 INSERT INTO `threadparticipant` VALUES (7, 6);
 INSERT INTO `threadparticipant` VALUES (7, 7);
 INSERT INTO `threadparticipant` VALUES (7, 8);
+INSERT INTO `threadparticipant` VALUES (7, 10);
 INSERT INTO `threadparticipant` VALUES (10, 1);
 INSERT INTO `threadparticipant` VALUES (10, 2);
 INSERT INTO `threadparticipant` VALUES (11, 1);
@@ -375,14 +393,13 @@ INSERT INTO `threadparticipant` VALUES (12, 2);
 INSERT INTO `threadparticipant` VALUES (13, 6);
 INSERT INTO `threadparticipant` VALUES (14, 1);
 INSERT INTO `threadparticipant` VALUES (14, 2);
-INSERT INTO `threadparticipant` VALUES (14, 7);
 INSERT INTO `threadparticipant` VALUES (14, 8);
 INSERT INTO `threadparticipant` VALUES (15, 1);
 INSERT INTO `threadparticipant` VALUES (15, 2);
-INSERT INTO `threadparticipant` VALUES (15, 7);
 INSERT INTO `threadparticipant` VALUES (15, 8);
-INSERT INTO `threadparticipant` VALUES (17, 2);
 INSERT INTO `threadparticipant` VALUES (17, 6);
+INSERT INTO `threadparticipant` VALUES (18, 1);
+INSERT INTO `threadparticipant` VALUES (18, 2);
 COMMIT;
 
 -- ----------------------------
@@ -405,21 +422,22 @@ CREATE TABLE `user` (
   PRIMARY KEY (`uid`),
   UNIQUE KEY `uid` (`uid`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, 'jb123', 'e10adc3949ba59abbe56e057f20f883e', 'Jane', 'Bob', '345', 'Brook', 'NY', 'I am from Booklyn', NULL, NULL, '2018-12-13 17:32:38');
-INSERT INTO `user` VALUES (2, 'tl456', 'e10adc3949ba59abbe56e057f20f883e', 'Tracy', 'Luo', '123 51st', 'Brook', 'NY', NULL, NULL, NULL, '2019-12-15 13:57:47');
-INSERT INTO `user` VALUES (3, 'cr512', 'e10adc3949ba59abbe56e057f20f883e', 'Cream', 'Rod', '210 Lexinton St', 'New York', 'NY', NULL, NULL, NULL, '2019-12-15 13:59:23');
+INSERT INTO `user` VALUES (1, 'jb123', 'e10adc3949ba59abbe56e057f20f883e', 'Jane', 'Bob', '345', 'Brook', 'NY', 'I am from Booklyn', NULL, NULL, '2019-12-17 21:15:36');
+INSERT INTO `user` VALUES (2, 'tl456', 'e10adc3949ba59abbe56e057f20f883e', 'Tracy', 'Luo', '123 51st', 'Brook', 'NY', NULL, NULL, NULL, '2019-12-17 21:15:52');
+INSERT INTO `user` VALUES (3, 'cr512', 'e10adc3949ba59abbe56e057f20f883e', 'Cream', 'Rod', '210 Lexinton St', 'New York', 'NY', NULL, NULL, NULL, '2019-12-17 22:05:12');
 INSERT INTO `user` VALUES (4, 'jw418', '654321', 'joel', 'wang', 'times square', 'New york', 'NY', 'A student', NULL, NULL, NULL);
 INSERT INTO `user` VALUES (5, 'mm123', '123456', 'Mark', 'Mazey', '59 4 ave', 'Brook', 'NY', 'I am an engineer', NULL, '9176550000', NULL);
 INSERT INTO `user` VALUES (6, 'yw4002', '123', 'YIZHOU', 'WANG', 'jkjhkhjkhk', 'BROOKLYN', 'NY', 'cs student', NULL, 'yw4002@nyu.edu', NULL);
-INSERT INTO `user` VALUES (7, 'ww123', 'e10adc3949ba59abbe56e057f20f883e', 'YIZHOU', 'WANG', 'NYU Tandon School of Engineering, 6 MetroTech Center', 'Brooklyn', 'NY', '', NULL, 'yw4002@nyu.edu', '2019-10-07 23:29:39');
+INSERT INTO `user` VALUES (7, 'ww123', 'e10adc3949ba59abbe56e057f20f883e', 'YIZHOU', 'WANG', 'NYU Tandon School of Engineering, 6 MetroTech Center', 'Brooklyn', 'NY', '', NULL, 'yw4002@nyu.edu', '2019-12-17 21:05:31');
 INSERT INTO `user` VALUES (8, 'dd123', 'e10adc3949ba59abbe56e057f20f883e', 'dddd', 'dddd', 'd', 'Brooklyn', 'NY', '', NULL, 'yw4002@nyu.edu', NULL);
 INSERT INTO `user` VALUES (9, 'tt123', '202cb962ac59075b964b07152d234b70', 'T', 'S', '450 46TH ST FL 1', 'BROOKLYN', 'NY', '', NULL, '', NULL);
+INSERT INTO `user` VALUES (10, 'ew123', '202cb962ac59075b964b07152d234b70', 'Earl', 'Wayne', '59th ST Brooklyn', 'New York', 'NY', 'teacher', NULL, '', '2019-12-17 22:05:55');
 COMMIT;
 
 -- ----------------------------
@@ -466,6 +484,36 @@ BEGIN
 			end if;
 		end if;
 	END;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Procedure structure for delete_friend
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_friend`;
+delimiter ;;
+CREATE PROCEDURE `nextdoor`.`delete_friend`(IN id INT(10), IN fid INT(10))
+BEGIN
+ BEGIN
+  Delete from friends where (userid = id and friendid=fid)or (userid = fid and friendid=id);
+        Delete from threadparticipant where (recid=id or recid=fid) and tid in (select tid from thread where type=1);
+ END;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Procedure structure for delete_neighbors
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `delete_neighbors`;
+delimiter ;;
+CREATE PROCEDURE `nextdoor`.`delete_neighbors`(IN id INT(10), IN fid INT(10))
+BEGIN
+ BEGIN
+  Delete from neighbors where neighborid = fid;
+        Delete from threadparticipant where (recid=id or recid=fid) and tid in (select tid from thread where type=0);
+ END;
 END
 ;;
 delimiter ;
